@@ -2,6 +2,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using EvaLabs.Domain.Context;
 using EvaLabs.Domain.Entities;
+using EvaLabs.Services.ExtensionMethod;
+using EvaLabs.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,10 +12,14 @@ namespace EvaLabs.Areas.Admin.Controllers
 {
     public class BranchController : AdminBaseController
     {
+        private readonly IAreaService _areaService;
+        private readonly ILabService _labService;
         private readonly EvaContext _context;
 
-        public BranchController(EvaContext context)
+        public BranchController(IAreaService areaService, ILabService labService, EvaContext context)
         {
+            _areaService = areaService;
+            _labService = labService;
             _context = context;
         }
 
@@ -133,16 +139,8 @@ namespace EvaLabs.Areas.Admin.Controllers
 
         private void GetViewData(Branch branch)
         {
-            if (branch == null)
-            {
-                ViewData["AreaId"] = new SelectList(_context.Areas, "Id", "AreaName");
-                ViewData["LabId"] = new SelectList(_context.Labs, "Id", "LabName");
-            }
-            else
-            {
-                ViewData["AreaId"] = new SelectList(_context.Areas, "Id", "AreaName", branch.AreaId);
-                ViewData["LabId"] = new SelectList(_context.Labs, "Id", "LabName", branch.LabId);
-            }
+            ViewData["AreaId"] = _areaService.AsEnumerable().AsSelectList("Id", "AreaName", "City.CityName", branch?.AreaId);
+            ViewData["LabId"] = _labService.AsEnumerable().AsSelectList("Id", "LabName", branch?.LabId);
         }
     }
 }

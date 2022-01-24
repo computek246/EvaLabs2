@@ -20,7 +20,7 @@ namespace EvaLabs.Areas.Admin.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var evaContext = _context.TestResults.Include(t => t.UserTest);
+            var evaContext = _context.TestResults.Include(t => t.UserTest).ThenInclude(e => e.Test);
             return View(await evaContext.ToListAsync());
         }
 

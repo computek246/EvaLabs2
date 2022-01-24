@@ -2,6 +2,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using EvaLabs.Domain.Context;
 using EvaLabs.Domain.Entities;
+using EvaLabs.Services.ExtensionMethod;
+using EvaLabs.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,10 +12,12 @@ namespace EvaLabs.Areas.Admin.Controllers
 {
     public class AreaController : AdminBaseController
     {
+        private readonly ICityService _cityService;
         private readonly EvaContext _context;
 
-        public AreaController(EvaContext context)
+        public AreaController(ICityService cityService, EvaContext context)
         {
+            _cityService = cityService;
             _context = context;
         }
 
@@ -131,14 +135,7 @@ namespace EvaLabs.Areas.Admin.Controllers
 
         private void GetViewData(Area area)
         {
-            if (area == null)
-            {
-                ViewData["CityId"] = new SelectList(_context.Cities, "Id", "CityName");
-            }
-            else
-            {
-                ViewData["CityId"] = new SelectList(_context.Cities, "Id", "CityName", area.CityId);
-            }
+            ViewData["CityId"] = _cityService.AsEnumerable().AsSelectList("Id", "CityName", area?.CityId);
         }
     }
 }

@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EvaLabs.Domain\EvaLabs.Domain.csproj" />
+    <ProjectReference Include="..\EvaLabs.Infrastructure\EvaLabs.Infrastructure.csproj" />
+    <ProjectReference Include="..\EvaLabs.Mapping\EvaLabs.Mapping.csproj" />
+    <ProjectReference Include="..\EvaLabs.ViewModels\EvaLabs.ViewModels.csproj" />
+  </ItemGroup>
+
+</Project>

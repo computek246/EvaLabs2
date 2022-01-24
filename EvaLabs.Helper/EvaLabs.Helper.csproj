@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="ExtensionMethod\**" />
+    <Compile Remove="Mapping\**" />
+    <EmbeddedResource Remove="ExtensionMethod\**" />
+    <EmbeddedResource Remove="Mapping\**" />
+    <None Remove="ExtensionMethod\**" />
+    <None Remove="Mapping\**" />
+  </ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.13" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.13" />
+		<PackageReference Include="FluentValidation.AspNetCore" Version="10.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\EvaLabs.Common\EvaLabs.Common.csproj" />
+	  <ProjectReference Include="..\EvaLabs.Interfaces\EvaLabs.Interfaces.csproj" />
+	</ItemGroup>
+
+</Project>

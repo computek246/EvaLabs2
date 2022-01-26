@@ -26,7 +26,7 @@ namespace EvaLabs.Services.DI
             {
                 if (x.Database.CanConnect())
                 {
-                    Singleton<Lab>.Instance = x.Labs.FirstOrDefault(e => e.IsActive);
+                    //
                 }
             });
         }

@@ -1,0 +1,33 @@
+@model IEnumerable<Area>
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.AreaName)</th>
+            <th>@Html.DisplayNameFor(model => model.City)</th>
+            <th>@Html.DisplayNameFor(model => model.IsActive)</th>
+            <th>@Html.DisplayNameFor(model => model.CreatorId)</th>
+            <th>@Html.DisplayNameFor(model => model.CreationDate)</th>
+            <th>@Html.DisplayNameFor(model => model.ModifierId)</th>
+            <th>@Html.DisplayNameFor(model => model.LastModifiedDate)</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.AreaName)</td>
+                <td>@Html.DisplayFor(modelItem => item.City.Id)</td>
+                <td>@Html.DisplayFor(modelItem => item.IsActive)</td>
+                <td>@Html.DisplayFor(modelItem => item.CreatorId)</td>
+                <td>@Html.DisplayFor(modelItem => item.CreationDate)</td>
+                <td>@Html.DisplayFor(modelItem => item.ModifierId)</td>
+                <td>@Html.DisplayFor(modelItem => item.LastModifiedDate)</td>
+                <partial name="_Actions" model="@item" />
+            </tr>
+        }
+    </tbody>
+</table>

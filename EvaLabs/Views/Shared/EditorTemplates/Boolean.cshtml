@@ -1,0 +1,8 @@
+﻿@model bool
+
+<div class="form-group form-check">
+    <label class="form-check-label">
+        @Html.CheckBoxFor(m => m, new { @class = "form-check-input" })
+        @Html.DisplayNameFor(model => model)
+    </label>
+</div>

@@ -15,21 +15,17 @@ namespace EvaLabs.Security.Entities
             UserRoles = new HashSet<UserRole>();
         }
 
-
+        public string FullName => $"{FirstName} {LastName}".Trim();
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string UserType { get; set; }
         public string UserPassword { get; set; }
-
-        public string FullName => $"{FirstName} {LastName}".Trim();
-
         public int? CreatorId { get; set; }
         public DateTime CreationDate { get; set; }
         public int? ModifierId { get; set; }
         public DateTime LastModifiedDate { get; set; }
         public bool IsActive { get; set; }
         public bool IsDeleted { get; set; }
-
 
         public ICollection<UserClaim> Claims { get; set; }
         public ICollection<UserLogin> Logins { get; set; }

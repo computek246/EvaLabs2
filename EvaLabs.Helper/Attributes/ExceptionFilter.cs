@@ -22,6 +22,7 @@ namespace EvaLabs.Helper.Attributes
 
         public void OnActionExecuting(ActionExecutingContext context)
         {
+            _logger.LogInformation(new string('-', 196));
             _logger.LogInformation($"OnActionExecuting :{context.ActionDescriptor.DisplayName}");
         }
 

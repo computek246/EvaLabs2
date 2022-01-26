@@ -51,7 +51,7 @@ namespace EvaLabs.Security.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "7c7443cd-cc35-4f77-bae3-6f5e432c4311",
+                            ConcurrencyStamp = "bd310afb-3d5e-40dc-b895-1ded755ec326",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });

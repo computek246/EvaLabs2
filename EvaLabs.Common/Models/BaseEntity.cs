@@ -4,6 +4,6 @@ namespace EvaLabs.Common.Models
 {
     public class BaseEntity : IEntity<int>
     {
-        public int Id { get; set; }
+        public int Id { get; set; } // Id (Primary key)
     }
 }

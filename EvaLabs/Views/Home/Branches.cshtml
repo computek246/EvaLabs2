@@ -1,5 +1,4 @@
-﻿@using EvaLabs.ViewModels
-<h1>Branches</h1>
+﻿<h1>Branches</h1>
 @(Html.Kendo().Grid<BranchViewModel>()
     .Name("gridBranches")
     .HtmlAttributes(new { })
@@ -23,7 +22,7 @@
         grid.Groupable(g => g.Enabled(false));
         grid.ToolBar(t =>
         {
-            if (_currentUserService.IsAuthenticated)
+            if (CurrentUserService.IsAuthenticated)
             {
                 t.Excel();
                 t.Pdf();

@@ -19,13 +19,13 @@ namespace EvaLabs.Services.BaseService
     public interface IService<in TKey, TModel, in TFilter> : IService
         where TKey : IEquatable<TKey>
         where TModel : IEntity<TKey>
-        where TFilter : class
     {
-        public Task<Result<IPagedList<TModel>>> ListAsync(TFilter filter, CancellationToken cancellationToken);
-        public Task<Result<IEnumerable<TModel>>> ListAllAsync(TFilter filter, CancellationToken cancellationToken);
-        public Task<Result<TModel>> GetByIdAsync(TKey id, CancellationToken cancellationToken);
-        public Task<Result<TModel>> CreateOrUpdateAsync(TModel model, CancellationToken cancellationToken);
-        public Task<Result<bool>> DeleteAsync(TKey id, CancellationToken cancellationToken);
-        public Task<Result<bool>> ToggleEnableProp(TKey id, CancellationToken cancellationToken);
+
+        public Task<Result<IPagedList<TModel>>> ListAsync(TFilter filter, CancellationToken cancellationToken = default);
+        public Task<Result<IEnumerable<TModel>>> ListAllAsync(TFilter filter, CancellationToken cancellationToken = default);
+        public Task<Result<TModel>> GetByIdAsync(TKey id, CancellationToken cancellationToken = default);
+        public Task<Result<TModel>> CreateOrUpdateAsync(TModel model, CancellationToken cancellationToken = default);
+        public Task<Result<bool>> DeleteAsync(TKey id, CancellationToken cancellationToken = default);
+        public Task<Result<bool>> ToggleEnableProp(TKey id, CancellationToken cancellationToken = default);
     }
 }

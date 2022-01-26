@@ -1,0 +1,17 @@
+@model Test
+<div>
+    <h4>Test</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">@Html.DisplayNameFor(model => model.TestName)</dt>
+        <dd class = "col-sm-10">@Html.DisplayFor(model => model.TestName)</dd>
+        <dt class = "col-sm-2">@Html.DisplayNameFor(model => model.TestDetails)</dt>
+        <dd class = "col-sm-10">@Html.DisplayFor(model => model.TestDetails)</dd>
+        <dt class = "col-sm-2">@Html.DisplayNameFor(model => model.Price)</dt>
+        <dd class = "col-sm-10">@Html.DisplayFor(model => model.Price)</dd>
+        <dt class = "col-sm-2">@Html.DisplayNameFor(model => model.AtHome)</dt>
+        <dd class = "col-sm-10">@Html.DisplayFor(model => model.AtHome)</dd>
+        <partial name="_Detalis" model="Model" />
+    </dl>
+</div>
+<partial name="_BackOrEdit" model="Model" />

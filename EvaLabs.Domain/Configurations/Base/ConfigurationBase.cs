@@ -1,4 +1,5 @@
-﻿using EvaLabs.Common.Models;
+﻿using System;
+using EvaLabs.Common.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -19,16 +20,26 @@ namespace EvaLabs.Domain.Configurations.Base
         {
             ConfigureEntity(builder);
 
-            builder.HasKey(e => e.Id);
-            builder.HasQueryFilter(e => e.IsDeleted == false);
+            builder.HasKey(x => x.Id).IsClustered();
+            builder.Property(x => x.Id).HasColumnName("Id").IsRequired().ValueGeneratedOnAdd().UseIdentityColumn();
 
-            //builder.Property(e => e.IsActive).HasDefaultValue(true);
-            //builder.Property(e => e.IsDeleted).HasDefaultValue(false);
+            builder.Property(x => x.IsActive).HasColumnName("IsActive");
+            builder.Property(x => x.CreatorId).HasColumnName("CreatorId");
+            builder.Property(x => x.CreationDate).HasColumnName("CreationDate").HasColumnType("datetime");
+            builder.Property(x => x.ModifierId).HasColumnName("ModifierId");
+            builder.Property(x => x.LastModifiedDate).HasColumnName("LastModifiedDate").HasColumnType("datetime");
+            builder.Property(x => x.IsDeleted).HasColumnName("IsDeleted");
 
-            builder.Property(e => e.CreatorId).HasDefaultValue(120);
-            builder.Property(e => e.ModifierId).HasDefaultValue(120);
-            builder.Property(e => e.CreationDate).HasColumnType("datetime").HasDefaultValueSql("getdate()");
-            builder.Property(e => e.LastModifiedDate).HasColumnType("datetime").HasDefaultValueSql("getdate()");
+
+
+            //builder.Property(x => x.IsActive).HasDefaultValue(true);
+            //builder.Property(x => x.IsDeleted).HasDefaultValue(false);
+            builder.Property(x => x.CreatorId).HasDefaultValue(120);
+            builder.Property(x => x.ModifierId).HasDefaultValue(120);
+            builder.Property(x => x.CreationDate).HasDefaultValueSql("getdate()");
+            builder.Property(x => x.LastModifiedDate).HasDefaultValueSql("getdate()");
+
+            builder.HasQueryFilter(x => x.IsDeleted == false);
         }
 
         public abstract void ConfigureEntity(EntityTypeBuilder<TEntity> builder);

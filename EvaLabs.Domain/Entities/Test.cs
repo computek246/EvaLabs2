@@ -7,7 +7,7 @@ namespace EvaLabs.Domain.Entities
     {
         public Test()
         {
-            Branchs = new HashSet<TestBranchs>();
+            TestBranches = new HashSet<TestBranch>();
             UserTests = new HashSet<UserTest>();
         }
 
@@ -16,7 +16,7 @@ namespace EvaLabs.Domain.Entities
         public decimal Price { get; set; }
         public bool AtHome { get; set; }
 
-        public ICollection<TestBranchs> Branchs { get; set; }
+        public ICollection<TestBranch> TestBranches { get; set; }
         public ICollection<UserTest> UserTests { get; set; }
     }
 }

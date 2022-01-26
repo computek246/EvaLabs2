@@ -7,6 +7,11 @@ namespace EvaLabs.Domain.Entities
 {
     public class User : Auditable<int?>, IIdentityUser<int>
     {
+        public User()
+        {
+            UserTests = new HashSet<UserTest>();
+        }
+
         public string UserName { get; set; }
         public string NormalizedUserName { get; set; }
         public string Email { get; set; }

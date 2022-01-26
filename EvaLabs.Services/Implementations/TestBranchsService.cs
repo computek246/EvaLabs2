@@ -19,7 +19,7 @@ using Microsoft.Extensions.Logging;
 
 namespace EvaLabs.Services.Implementations
 {
-	public class TestBranchsService : Service<TestBranchs>, ITestBranchsService
+	public class TestBranchsService : Service<TestBranch>, ITestBranchsService
 	{
 		private readonly IMapper _mapper;
 
@@ -73,9 +73,9 @@ namespace EvaLabs.Services.Implementations
 				if (model.HasErrors)
 					return Result<TestBranchsViewModel>.Failed(model.Errors);
 
-				var entity = _mapper.Map<TestBranchs>(model);
+				var entity = _mapper.Map<TestBranch>(model);
 
-				await Repository.AddOrUpdateAsync<TestBranchs, Auditable>(entity, (x, y) =>
+				await Repository.AddOrUpdateAsync<TestBranch, Auditable>(entity, (x, y) =>
 				{
 					x.CreatorId = y.CreatorId;
 					x.CreationDate = y.CreationDate;

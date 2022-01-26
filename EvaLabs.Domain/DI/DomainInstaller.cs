@@ -15,17 +15,20 @@ namespace EvaLabs.Domain.DI
         public void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
             var connectionString = configuration.GetConnectionString("DefaultConnection");
+            
             services.AddDbContext<EvaContext>(options =>
             {
                 options.UseSqlServer(connectionString);
                 options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             });
-            
+
+            services.AddScoped<IEvaContext, EvaContext>();
+
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
         }
-        
+
     }
 }

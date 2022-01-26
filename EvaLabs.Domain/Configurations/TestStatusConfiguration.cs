@@ -1,5 +1,6 @@
 ﻿using EvaLabs.Domain.Configurations.Base;
 using EvaLabs.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace EvaLabs.Domain.Configurations
@@ -8,6 +9,9 @@ namespace EvaLabs.Domain.Configurations
     {
         public override void ConfigureEntity(EntityTypeBuilder<TestStatus> builder)
         {
+            builder.ToTable("TestStatuses", "dbo");
+
+            builder.Property(x => x.StatusName).HasColumnName("StatusName").HasColumnType("nvarchar(256)").IsRequired(false).HasMaxLength(256);
         }
     }
 }

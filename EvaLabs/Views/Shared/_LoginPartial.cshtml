@@ -1,4 +1,5 @@
-﻿<ul class="navbar-nav">
+﻿@using EvaLabs.Common.ExtensionMethod
+<ul class="navbar-nav">
 
     <li class="nav-item">
         <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
@@ -20,18 +21,10 @@
     </li>
 
 
-    @if (_signInManager.IsSignedIn(User))
+    @if (SignInManager.IsSignedIn(User))
     {
-
-        if (User.IsInRole(AppValues.AppRoles.Admin))
-        {
-            <li class="nav-item">
-                <a class="nav-link text-dark" asp-area="admin" asp-controller="Home" asp-action="Index">Admin</a>
-            </li>
-        }
-
         <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">My Account</a>
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@(CurrentUserService.Principal.GetFromClaims<string>(AppValues.AppClaims.FullName))</a>
         </li>
         <li class="nav-item">
             <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new {area = ""})">

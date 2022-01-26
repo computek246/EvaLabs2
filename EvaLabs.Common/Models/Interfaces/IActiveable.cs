@@ -2,6 +2,6 @@
 {
     public interface IActiveable
     {
-        bool IsActive { get; set; }
+        bool IsActive { get; set; } // IsActive
     }
 }

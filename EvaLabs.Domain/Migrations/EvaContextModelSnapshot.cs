@@ -24,46 +24,59 @@ namespace EvaLabs.Domain.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
+                        .HasColumnName("Id")
+                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
+                        .HasAnnotation("SqlServer:IdentitySeed", 1)
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("AreaName")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("nvarchar(256)")
+                        .HasColumnName("AreaName");
 
                     b.Property<int>("CityId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("CityId");
 
                     b.Property<DateTime>("CreationDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
+                        .HasColumnName("CreationDate")
                         .HasDefaultValueSql("getdate()");
 
                     b.Property<int>("CreatorId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasDefaultValue(120);
+                        .HasDefaultValue(120)
+                        .HasColumnName("CreatorId");
 
                     b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("IsActive");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("IsDeleted");
 
                     b.Property<DateTime>("LastModifiedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
+                        .HasColumnName("LastModifiedDate")
                         .HasDefaultValueSql("getdate()");
 
                     b.Property<int>("ModifierId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasDefaultValue(120);
+                        .HasDefaultValue(120)
+                        .HasColumnName("ModifierId");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .IsClustered();
 
-                    b.HasIndex("CityId");
+                    b.HasIndex("CityId")
+                        .HasDatabaseName("IX_Areas_CityId");
 
-                    b.ToTable("Areas");
+                    b.ToTable("Areas", "dbo");
                 });
 
             modelBuilder.Entity("EvaLabs.Domain.Entities.Branch", b =>
@@ -71,55 +84,71 @@ namespace EvaLabs.Domain.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
+                        .HasColumnName("Id")
+                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
+                        .HasAnnotation("SqlServer:IdentitySeed", 1)
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("AreaId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("AreaId");
 
                     b.Property<string>("BranchAddress")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("nvarchar(256)")
+                        .HasColumnName("BranchAddress");
 
                     b.Property<string>("BranchName")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("nvarchar(256)")
+                        .HasColumnName("BranchName");
 
                     b.Property<DateTime>("CreationDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
+                        .HasColumnName("CreationDate")
                         .HasDefaultValueSql("getdate()");
 
                     b.Property<int>("CreatorId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasDefaultValue(120);
+                        .HasDefaultValue(120)
+                        .HasColumnName("CreatorId");
 
                     b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("IsActive");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("IsDeleted");
 
                     b.Property<int>("LabId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("LabId");
 
                     b.Property<DateTime>("LastModifiedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
+                        .HasColumnName("LastModifiedDate")
                         .HasDefaultValueSql("getdate()");
 
                     b.Property<int>("ModifierId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasDefaultValue(120);
+                        .HasDefaultValue(120)
+                        .HasColumnName("ModifierId");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .IsClustered();
 
-                    b.HasIndex("AreaId");
+                    b.HasIndex("AreaId")
+                        .HasDatabaseName("IX_Branches_AreaId");
 
-                    b.HasIndex("LabId");
+                    b.HasIndex("LabId")
+                        .HasDatabaseName("IX_Branches_LabId");
 
-                    b.ToTable("Branches");
+                    b.ToTable("Branches", "dbo");
                 });
 
             modelBuilder.Entity("EvaLabs.Domain.Entities.City", b =>
@@ -127,340 +156,52 @@ namespace EvaLabs.Domain.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
+                        .HasColumnName("Id")
+                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
+                        .HasAnnotation("SqlServer:IdentitySeed", 1)
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("CityName")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("nvarchar(256)")
+                        .HasColumnName("CityName");
 
                     b.Property<DateTime>("CreationDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
+                        .HasColumnName("CreationDate")
                         .HasDefaultValueSql("getdate()");
 
                     b.Property<int>("CreatorId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasDefaultValue(120);
+                        .HasDefaultValue(120)
+                        .HasColumnName("CreatorId");
 
                     b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("IsActive");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("IsDeleted");
 
                     b.Property<DateTime>("LastModifiedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
+                        .HasColumnName("LastModifiedDate")
                         .HasDefaultValueSql("getdate()");
 
                     b.Property<int>("ModifierId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasDefaultValue(120);
+                        .HasDefaultValue(120)
+                        .HasColumnName("ModifierId");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .IsClustered();
 
-                    b.ToTable("Cities");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CityName = "Alexandria",
-                            CreationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = 0,
-                            IsActive = true,
-                            IsDeleted = false,
-                            LastModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifierId = 0
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CityName = "Aswan",
-                            CreationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = 0,
-                            IsActive = true,
-                            IsDeleted = false,
-                            LastModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifierId = 0
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CityName = "Asyut",
-                            CreationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = 0,
-                            IsActive = true,
-                            IsDeleted = false,
-                            LastModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifierId = 0
-                        },
-                        new
-                        {
-                            Id = 4,
-                            CityName = "Beheira",
-                            CreationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = 0,
-                            IsActive = true,
-                            IsDeleted = false,
-                            LastModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifierId = 0
-                        },
-                        new
-                        {
-                            Id = 5,
-                            CityName = "Beni Suef",
-                            CreationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = 0,
-                            IsActive = true,
-                            IsDeleted = false,
-                            LastModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifierId = 0
-                        },
-                        new
-                        {
-                            Id = 6,
-                            CityName = "Cairo",
-                            CreationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = 0,
-                            IsActive = true,
-                            IsDeleted = false,
-                            LastModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifierId = 0
-                        },
-                        new
-                        {
-                            Id = 7,
-                            CityName = "Dakahlia",
-                            CreationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = 0,
-                            IsActive = true,
-                            IsDeleted = false,
-                            LastModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifierId = 0
-                        },
-                        new
-                        {
-                            Id = 8,
-                            CityName = "Damietta",
-                            CreationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = 0,
-                            IsActive = true,
-                            IsDeleted = false,
-                            LastModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifierId = 0
-                        },
-                        new
-                        {
-                            Id = 9,
-                            CityName = "Faiyum",
-                            CreationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = 0,
-                            IsActive = true,
-                            IsDeleted = false,
-                            LastModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifierId = 0
-                        },
-                        new
-                        {
-                            Id = 10,
-                            CityName = "Gharbia",
-                            CreationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = 0,
-                            IsActive = true,
-                            IsDeleted = false,
-                            LastModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifierId = 0
-                        },
-                        new
-                        {
-                            Id = 11,
-                            CityName = "Giza",
-                            CreationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = 0,
-                            IsActive = true,
-                            IsDeleted = false,
-                            LastModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifierId = 0
-                        },
-                        new
-                        {
-                            Id = 12,
-                            CityName = "Ismailia",
-                            CreationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = 0,
-                            IsActive = true,
-                            IsDeleted = false,
-                            LastModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifierId = 0
-                        },
-                        new
-                        {
-                            Id = 13,
-                            CityName = "Kafr El Sheikh",
-                            CreationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = 0,
-                            IsActive = true,
-                            IsDeleted = false,
-                            LastModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifierId = 0
-                        },
-                        new
-                        {
-                            Id = 14,
-                            CityName = "Luxor",
-                            CreationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = 0,
-                            IsActive = true,
-                            IsDeleted = false,
-                            LastModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifierId = 0
-                        },
-                        new
-                        {
-                            Id = 15,
-                            CityName = "Matruh",
-                            CreationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = 0,
-                            IsActive = true,
-                            IsDeleted = false,
-                            LastModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifierId = 0
-                        },
-                        new
-                        {
-                            Id = 16,
-                            CityName = "Minya",
-                            CreationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = 0,
-                            IsActive = true,
-                            IsDeleted = false,
-                            LastModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifierId = 0
-                        },
-                        new
-                        {
-                            Id = 17,
-                            CityName = "Monufia",
-                            CreationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = 0,
-                            IsActive = true,
-                            IsDeleted = false,
-                            LastModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifierId = 0
-                        },
-                        new
-                        {
-                            Id = 18,
-                            CityName = "New Valley",
-                            CreationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = 0,
-                            IsActive = true,
-                            IsDeleted = false,
-                            LastModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifierId = 0
-                        },
-                        new
-                        {
-                            Id = 19,
-                            CityName = "North Sinai",
-                            CreationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = 0,
-                            IsActive = true,
-                            IsDeleted = false,
-                            LastModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifierId = 0
-                        },
-                        new
-                        {
-                            Id = 20,
-                            CityName = "Port Said",
-                            CreationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = 0,
-                            IsActive = true,
-                            IsDeleted = false,
-                            LastModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifierId = 0
-                        },
-                        new
-                        {
-                            Id = 21,
-                            CityName = "Qalyubia",
-                            CreationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = 0,
-                            IsActive = true,
-                            IsDeleted = false,
-                            LastModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifierId = 0
-                        },
-                        new
-                        {
-                            Id = 22,
-                            CityName = "Qena",
-                            CreationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = 0,
-                            IsActive = true,
-                            IsDeleted = false,
-                            LastModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifierId = 0
-                        },
-                        new
-                        {
-                            Id = 23,
-                            CityName = "Red Sea",
-                            CreationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = 0,
-                            IsActive = true,
-                            IsDeleted = false,
-                            LastModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifierId = 0
-                        },
-                        new
-                        {
-                            Id = 24,
-                            CityName = "Sharqia",
-                            CreationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = 0,
-                            IsActive = true,
-                            IsDeleted = false,
-                            LastModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifierId = 0
-                        },
-                        new
-                        {
-                            Id = 25,
-                            CityName = "Sohag",
-                            CreationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = 0,
-                            IsActive = true,
-                            IsDeleted = false,
-                            LastModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifierId = 0
-                        },
-                        new
-                        {
-                            Id = 26,
-                            CityName = "South Sinai",
-                            CreationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = 0,
-                            IsActive = true,
-                            IsDeleted = false,
-                            LastModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifierId = 0
-                        },
-                        new
-                        {
-                            Id = 27,
-                            CityName = "Suez",
-                            CreationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = 0,
-                            IsActive = true,
-                            IsDeleted = false,
-                            LastModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifierId = 0
-                        });
+                    b.ToTable("Cities", "dbo");
                 });
 
             modelBuilder.Entity("EvaLabs.Domain.Entities.Lab", b =>
@@ -468,45 +209,57 @@ namespace EvaLabs.Domain.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
+                        .HasColumnName("Id")
+                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
+                        .HasAnnotation("SqlServer:IdentitySeed", 1)
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("CreationDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
+                        .HasColumnName("CreationDate")
                         .HasDefaultValueSql("getdate()");
 
                     b.Property<int>("CreatorId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasDefaultValue(120);
+                        .HasDefaultValue(120)
+                        .HasColumnName("CreatorId");
 
                     b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("IsActive");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("IsDeleted");
 
                     b.Property<string>("LabLogo")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("nvarchar(256)")
+                        .HasColumnName("LabLogo");
 
                     b.Property<string>("LabName")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("nvarchar(256)")
+                        .HasColumnName("LabName");
 
                     b.Property<DateTime>("LastModifiedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
+                        .HasColumnName("LastModifiedDate")
                         .HasDefaultValueSql("getdate()");
 
                     b.Property<int>("ModifierId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasDefaultValue(120);
+                        .HasDefaultValue(120)
+                        .HasColumnName("ModifierId");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .IsClustered();
 
-                    b.ToTable("Labs");
+                    b.ToTable("Labs", "dbo");
                 });
 
             modelBuilder.Entity("EvaLabs.Domain.Entities.Test", b =>
@@ -514,99 +267,128 @@ namespace EvaLabs.Domain.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
+                        .HasColumnName("Id")
+                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
+                        .HasAnnotation("SqlServer:IdentitySeed", 1)
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<bool>("AtHome")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("AtHome");
 
                     b.Property<DateTime>("CreationDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
+                        .HasColumnName("CreationDate")
                         .HasDefaultValueSql("getdate()");
 
                     b.Property<int>("CreatorId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasDefaultValue(120);
+                        .HasDefaultValue(120)
+                        .HasColumnName("CreatorId");
 
                     b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("IsActive");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("IsDeleted");
 
                     b.Property<DateTime>("LastModifiedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
+                        .HasColumnName("LastModifiedDate")
                         .HasDefaultValueSql("getdate()");
 
                     b.Property<int>("ModifierId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasDefaultValue(120);
+                        .HasDefaultValue(120)
+                        .HasColumnName("ModifierId");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,6)");
+                        .HasPrecision(18, 6)
+                        .HasColumnType("decimal(18,6)")
+                        .HasColumnName("Price");
 
                     b.Property<string>("TestDetails")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("nvarchar(256)")
+                        .HasColumnName("TestDetails");
 
                     b.Property<string>("TestName")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("nvarchar(256)")
+                        .HasColumnName("TestName");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .IsClustered();
 
-                    b.ToTable("Tests");
+                    b.ToTable("Tests", "dbo");
                 });
 
-            modelBuilder.Entity("EvaLabs.Domain.Entities.TestBranchs", b =>
+            modelBuilder.Entity("EvaLabs.Domain.Entities.TestBranch", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
+                        .HasColumnName("Id")
+                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
+                        .HasAnnotation("SqlServer:IdentitySeed", 1)
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("BranchId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("BranchId");
 
                     b.Property<DateTime>("CreationDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
+                        .HasColumnName("CreationDate")
                         .HasDefaultValueSql("getdate()");
 
                     b.Property<int>("CreatorId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasDefaultValue(120);
+                        .HasDefaultValue(120)
+                        .HasColumnName("CreatorId");
 
                     b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("IsActive");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("IsDeleted");
 
                     b.Property<DateTime>("LastModifiedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
+                        .HasColumnName("LastModifiedDate")
                         .HasDefaultValueSql("getdate()");
 
                     b.Property<int>("ModifierId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasDefaultValue(120);
+                        .HasDefaultValue(120)
+                        .HasColumnName("ModifierId");
 
                     b.Property<int>("TestId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("TestId");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .IsClustered();
 
-                    b.HasIndex("BranchId");
+                    b.HasIndex("BranchId")
+                        .HasDatabaseName("IX_TestBranchs_BranchId");
 
-                    b.HasIndex("TestId");
+                    b.HasIndex("TestId")
+                        .HasDatabaseName("IX_TestBranchs_TestId");
 
-                    b.ToTable("TestBranchs");
+                    b.ToTable("TestBranchs", "dbo");
                 });
 
             modelBuilder.Entity("EvaLabs.Domain.Entities.TestResult", b =>
@@ -614,47 +396,60 @@ namespace EvaLabs.Domain.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
+                        .HasColumnName("Id")
+                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
+                        .HasAnnotation("SqlServer:IdentitySeed", 1)
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("CreationDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
+                        .HasColumnName("CreationDate")
                         .HasDefaultValueSql("getdate()");
 
                     b.Property<int>("CreatorId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasDefaultValue(120);
+                        .HasDefaultValue(120)
+                        .HasColumnName("CreatorId");
 
                     b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("IsActive");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("IsDeleted");
 
                     b.Property<DateTime>("LastModifiedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
+                        .HasColumnName("LastModifiedDate")
                         .HasDefaultValueSql("getdate()");
 
                     b.Property<int>("ModifierId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasDefaultValue(120);
+                        .HasDefaultValue(120)
+                        .HasColumnName("ModifierId");
 
                     b.Property<string>("Result")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("nvarchar(256)")
+                        .HasColumnName("Result");
 
                     b.Property<int>("UserTestId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("UserTestId");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .IsClustered();
 
                     b.HasIndex("UserTestId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasDatabaseName("IX_TestResult_UserTestId");
 
-                    b.ToTable("TestResults");
+                    b.ToTable("TestResults", "dbo");
                 });
 
             modelBuilder.Entity("EvaLabs.Domain.Entities.TestStatus", b =>
@@ -662,41 +457,52 @@ namespace EvaLabs.Domain.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
+                        .HasColumnName("Id")
+                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
+                        .HasAnnotation("SqlServer:IdentitySeed", 1)
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("CreationDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
+                        .HasColumnName("CreationDate")
                         .HasDefaultValueSql("getdate()");
 
                     b.Property<int>("CreatorId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasDefaultValue(120);
+                        .HasDefaultValue(120)
+                        .HasColumnName("CreatorId");
 
                     b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("IsActive");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("IsDeleted");
 
                     b.Property<DateTime>("LastModifiedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
+                        .HasColumnName("LastModifiedDate")
                         .HasDefaultValueSql("getdate()");
 
                     b.Property<int>("ModifierId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasDefaultValue(120);
+                        .HasDefaultValue(120)
+                        .HasColumnName("ModifierId");
 
                     b.Property<string>("StatusName")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("nvarchar(256)")
+                        .HasColumnName("StatusName");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .IsClustered();
 
-                    b.ToTable("TestStatuses");
+                    b.ToTable("TestStatuses", "dbo");
                 });
 
             modelBuilder.Entity("EvaLabs.Domain.Entities.User", b =>
@@ -704,6 +510,9 @@ namespace EvaLabs.Domain.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
+                        .HasColumnName("Id")
+                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
+                        .HasAnnotation("SqlServer:IdentitySeed", 1)
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("AccessFailedCount")
@@ -716,12 +525,14 @@ namespace EvaLabs.Domain.Migrations
                     b.Property<DateTime>("CreationDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
+                        .HasColumnName("CreationDate")
                         .HasDefaultValueSql("getdate()");
 
                     b.Property<int?>("CreatorId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasDefaultValue(120);
+                        .HasDefaultValue(120)
+                        .HasColumnName("CreatorId");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -735,14 +546,17 @@ namespace EvaLabs.Domain.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("IsActive");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("IsDeleted");
 
                     b.Property<DateTime>("LastModifiedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
+                        .HasColumnName("LastModifiedDate")
                         .HasDefaultValueSql("getdate()");
 
                     b.Property<string>("LastName")
@@ -758,7 +572,8 @@ namespace EvaLabs.Domain.Migrations
                     b.Property<int?>("ModifierId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasDefaultValue(120);
+                        .HasDefaultValue(120)
+                        .HasColumnName("ModifierId");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
@@ -792,20 +607,23 @@ namespace EvaLabs.Domain.Migrations
 
                     b.Property<string>("UserPassword")
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("UserPassword");
 
                     b.Property<string>("UserType")
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("UserType");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .IsClustered();
 
                     b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
+                        .HasDatabaseName("IX_EmailIndex");
 
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
-                        .HasDatabaseName("UserNameIndex")
+                        .HasDatabaseName("IX_UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", "dbo");
@@ -816,88 +634,118 @@ namespace EvaLabs.Domain.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
+                        .HasColumnName("Id")
+                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
+                        .HasAnnotation("SqlServer:IdentitySeed", 1)
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int?>("AreaId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("AreaId");
 
                     b.Property<int?>("BranchId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("BranchId");
 
                     b.Property<int?>("CityId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("CityId");
 
                     b.Property<DateTime>("CreationDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
+                        .HasColumnName("CreationDate")
                         .HasDefaultValueSql("getdate()");
 
                     b.Property<int>("CreatorId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasDefaultValue(120);
+                        .HasDefaultValue(120)
+                        .HasColumnName("CreatorId");
 
                     b.Property<string>("HomeAddress")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("nvarchar(256)")
+                        .HasColumnName("HomeAddress");
 
                     b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("IsActive");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("IsDeleted");
 
                     b.Property<int>("LabId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("LabId");
 
                     b.Property<DateTime>("LastModifiedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
+                        .HasColumnName("LastModifiedDate")
                         .HasDefaultValueSql("getdate()");
 
                     b.Property<int>("ModifierId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasDefaultValue(120);
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,6)");
+                        .HasDefaultValue(120)
+                        .HasColumnName("ModifierId");
 
                     b.Property<DateTime>("ResultDate")
-                        .HasColumnType("date");
+                        .HasColumnType("date")
+                        .HasColumnName("ResultDate");
 
                     b.Property<DateTime>("TestDate")
-                        .HasColumnType("date");
+                        .HasColumnType("date")
+                        .HasColumnName("TestDate");
 
                     b.Property<int>("TestId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("TestId");
 
                     b.Property<int>("TestLocation")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("TestLocation");
+
+                    b.Property<decimal>("TestPrice")
+                        .HasPrecision(18, 6)
+                        .HasColumnType("decimal(18,6)")
+                        .HasColumnName("TestPrice");
 
                     b.Property<int>("TestStatusId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("TestStatusId");
 
                     b.Property<int>("UserId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("UserId");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .IsClustered();
 
-                    b.HasIndex("AreaId");
+                    b.HasIndex("AreaId")
+                        .HasDatabaseName("IX_UserTests_AreaId");
 
-                    b.HasIndex("BranchId");
+                    b.HasIndex("BranchId")
+                        .HasDatabaseName("IX_UserTests_BranchId");
 
-                    b.HasIndex("CityId");
+                    b.HasIndex("CityId")
+                        .HasDatabaseName("IX_UserTests_CityId");
 
-                    b.HasIndex("LabId");
+                    b.HasIndex("LabId")
+                        .HasDatabaseName("IX_UserTests_LabId");
 
-                    b.HasIndex("TestId");
+                    b.HasIndex("TestId")
+                        .HasDatabaseName("IX_UserTests_TestId");
 
-                    b.HasIndex("TestStatusId");
+                    b.HasIndex("TestStatusId")
+                        .HasDatabaseName("IX_UserTests_TestStatusId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId")
+                        .HasDatabaseName("IX_UserTests_UserId");
 
-                    b.ToTable("UserTests");
+                    b.ToTable("UserTests", "dbo");
                 });
 
             modelBuilder.Entity("EvaLabs.Domain.Entities.Area", b =>
@@ -905,6 +753,7 @@ namespace EvaLabs.Domain.Migrations
                     b.HasOne("EvaLabs.Domain.Entities.City", "City")
                         .WithMany("Areas")
                         .HasForeignKey("CityId")
+                        .HasConstraintName("FK_Areas_Cities_CityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -916,12 +765,14 @@ namespace EvaLabs.Domain.Migrations
                     b.HasOne("EvaLabs.Domain.Entities.Area", "Area")
                         .WithMany("Branches")
                         .HasForeignKey("AreaId")
+                        .HasConstraintName("FK_Branches_Areas_AreaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("EvaLabs.Domain.Entities.Lab", "Lab")
                         .WithMany("Branches")
                         .HasForeignKey("LabId")
+                        .HasConstraintName("FK_Branches_Labs_LabId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -930,17 +781,19 @@ namespace EvaLabs.Domain.Migrations
                     b.Navigation("Lab");
                 });
 
-            modelBuilder.Entity("EvaLabs.Domain.Entities.TestBranchs", b =>
+            modelBuilder.Entity("EvaLabs.Domain.Entities.TestBranch", b =>
                 {
                     b.HasOne("EvaLabs.Domain.Entities.Branch", "Branch")
-                        .WithMany("Tests")
+                        .WithMany("TestBranches")
                         .HasForeignKey("BranchId")
+                        .HasConstraintName("FK_TestBranchs_Branches_BranchId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("EvaLabs.Domain.Entities.Test", "Test")
-                        .WithMany("Branchs")
+                        .WithMany("TestBranches")
                         .HasForeignKey("TestId")
+                        .HasConstraintName("FK_TestBranchs_Tests_TestId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -954,6 +807,7 @@ namespace EvaLabs.Domain.Migrations
                     b.HasOne("EvaLabs.Domain.Entities.UserTest", "UserTest")
                         .WithOne("TestResult")
                         .HasForeignKey("EvaLabs.Domain.Entities.TestResult", "UserTestId")
+                        .HasConstraintName("FK_TestResult_UserTest_UserTestId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -964,37 +818,44 @@ namespace EvaLabs.Domain.Migrations
                 {
                     b.HasOne("EvaLabs.Domain.Entities.Area", "Area")
                         .WithMany("UserTests")
-                        .HasForeignKey("AreaId");
+                        .HasForeignKey("AreaId")
+                        .HasConstraintName("FK_UserTests_Areas_AreaId");
 
                     b.HasOne("EvaLabs.Domain.Entities.Branch", "Branch")
                         .WithMany("UserTests")
-                        .HasForeignKey("BranchId");
+                        .HasForeignKey("BranchId")
+                        .HasConstraintName("FK_UserTests_Branches_BranchId");
 
                     b.HasOne("EvaLabs.Domain.Entities.City", "City")
                         .WithMany("UserTests")
-                        .HasForeignKey("CityId");
+                        .HasForeignKey("CityId")
+                        .HasConstraintName("FK_UserTests_Cities_CityId");
 
                     b.HasOne("EvaLabs.Domain.Entities.Lab", "Lab")
                         .WithMany("UserTests")
                         .HasForeignKey("LabId")
+                        .HasConstraintName("FK_UserTests_Labs_LabId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("EvaLabs.Domain.Entities.Test", "Test")
                         .WithMany("UserTests")
                         .HasForeignKey("TestId")
+                        .HasConstraintName("FK_UserTests_Tests_TestId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("EvaLabs.Domain.Entities.TestStatus", "TestStatus")
                         .WithMany("UserTests")
                         .HasForeignKey("TestStatusId")
+                        .HasConstraintName("FK_UserTests_TestStatuses_TestStatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("EvaLabs.Domain.Entities.User", "User")
                         .WithMany("UserTests")
                         .HasForeignKey("UserId")
+                        .HasConstraintName("FK_UserTests_AspNetUsers_UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1022,7 +883,7 @@ namespace EvaLabs.Domain.Migrations
 
             modelBuilder.Entity("EvaLabs.Domain.Entities.Branch", b =>
                 {
-                    b.Navigation("Tests");
+                    b.Navigation("TestBranches");
 
                     b.Navigation("UserTests");
                 });
@@ -1043,7 +904,7 @@ namespace EvaLabs.Domain.Migrations
 
             modelBuilder.Entity("EvaLabs.Domain.Entities.Test", b =>
                 {
-                    b.Navigation("Branchs");
+                    b.Navigation("TestBranches");
 
                     b.Navigation("UserTests");
                 });

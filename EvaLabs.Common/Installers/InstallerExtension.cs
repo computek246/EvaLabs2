@@ -45,7 +45,7 @@ namespace EvaLabs.Common.Installers
         {
             Installers.ForEach(installer =>
             {
-                Console.WriteLine($"ConfigureService => :{installer.GetType().FullName}");
+                //Console.WriteLine($"ConfigureService => :{installer.GetType().FullName}");
                 installer.ConfigureServices(services, configuration);
             });
         }
@@ -54,7 +54,7 @@ namespace EvaLabs.Common.Installers
         {
             Installers.ForEach(installer =>
             {
-                Console.WriteLine($"ConfigurePipeline => :{installer.GetType().FullName}");
+                //Console.WriteLine($"ConfigurePipeline => :{installer.GetType().FullName}");
                 installer.Configure(app, env);
             });
         }

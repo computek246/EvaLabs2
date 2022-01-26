@@ -11,7 +11,7 @@ namespace EvaLabs.Domain.Entities
         public int TestId { get; set; }
         public int TestStatusId { get; set; }
         public int TestLocation { get; set; }
-        public decimal Price { get; set; }
+        public decimal TestPrice { get; set; }
         public DateTime TestDate { get; set; }
         public DateTime ResultDate { get; set; }
 

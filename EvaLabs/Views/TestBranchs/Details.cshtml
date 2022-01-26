@@ -1,0 +1,13 @@
+@model TestBranch
+<div>
+    <h4>TestBranch</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">@Html.DisplayNameFor(model => model.Test)</dt>
+        <dd class = "col-sm-10">@Html.DisplayFor(model => model.Test.Id)</dd>
+        <dt class = "col-sm-2">@Html.DisplayNameFor(model => model.Branch)</dt>
+        <dd class = "col-sm-10">@Html.DisplayFor(model => model.Branch.Id)</dd>
+        <partial name="_Detalis" model="Model" />
+    </dl>
+</div>
+<partial name="_BackOrEdit" model="Model" />

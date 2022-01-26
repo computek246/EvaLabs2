@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using EvaLabs.ViewModels.Common.Helper;
 using FluentValidation;
 
@@ -6,6 +7,9 @@ namespace EvaLabs.ViewModels
 {
 	public class AreaViewModel : ErrorValidator
     {
+        public string AreaName { get; set; }
+        public int CityId { get; set; }
+        public string CityName { get; set; }
 
         protected override bool Validate()
         {
@@ -17,7 +21,7 @@ namespace EvaLabs.ViewModels
     {
         public AreaValidator()
         {
-
+            
         }
     }
 }

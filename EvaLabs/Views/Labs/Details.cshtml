@@ -1,0 +1,13 @@
+@model Lab
+<div>
+    <h4>Lab</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">@Html.DisplayNameFor(model => model.LabName)</dt>
+        <dd class = "col-sm-10">@Html.DisplayFor(model => model.LabName)</dd>
+        <dt class = "col-sm-2">@Html.DisplayNameFor(model => model.LabLogo)</dt>
+        <dd class = "col-sm-10">@Html.DisplayFor(model => model.LabLogo)</dd>
+        <partial name="_Detalis" model="Model" />
+    </dl>
+</div>
+<partial name="_BackOrEdit" model="Model" />

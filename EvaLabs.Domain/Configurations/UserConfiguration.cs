@@ -12,11 +12,12 @@ namespace EvaLabs.Domain.Configurations
             builder.ToTable("AspNetUsers", "dbo");
 
             builder.Ignore(e => e.FullName);
-            builder.Property(e => e.UserPassword).HasMaxLength(50);
-            builder.Property(e => e.UserType).HasMaxLength(50);
-            builder.HasIndex(e => e.NormalizedEmail).HasDatabaseName("EmailIndex");
-            builder.HasIndex(e => e.NormalizedUserName).HasDatabaseName("UserNameIndex").IsUnique()
-                .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+            builder.Property(x => x.UserPassword).HasColumnName("UserPassword").HasColumnType("nvarchar(50)").IsRequired(false).HasMaxLength(50);
+            builder.Property(x => x.UserType).HasColumnName("UserType").HasColumnType("nvarchar(50)").IsRequired(false).HasMaxLength(50);
+
+            builder.HasIndex(x => x.NormalizedEmail).HasDatabaseName("IX_EmailIndex");
+            builder.HasIndex(x => x.NormalizedUserName).HasDatabaseName("IX_UserNameIndex").IsUnique().HasFilter("[NormalizedUserName] IS NOT NULL");
         }
     }
 }

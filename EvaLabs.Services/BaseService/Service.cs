@@ -7,12 +7,13 @@ using EvaLabs.Common.ExtensionMethod;
 using EvaLabs.Common.Models.Interfaces;
 using EvaLabs.Common.ViewModels;
 using EvaLabs.Infrastructure;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace EvaLabs.Services.BaseService
 {
     public abstract class Service<TEntity> : IService
-        where TEntity : class, IActiveable
+        where TEntity : class, IEntity<int>, IActiveable
     {
         private readonly ILogger _logger;
         public readonly IUnitOfWork UnitOfWork;
@@ -26,7 +27,7 @@ namespace EvaLabs.Services.BaseService
             Repository = unitOfWork.GetRepository<TEntity>();
         }
 
-        public IQueryable<TEntity> Queryable =>
+        public virtual IQueryable<TEntity> Queryable =>
             Repository.GetAll(e => e.IsActive);
 
         public virtual IEnumerable AsEnumerable()
@@ -64,7 +65,7 @@ namespace EvaLabs.Services.BaseService
                 if (id == default)
                     return Result<TResult>.Failed(AppValues.InvalidData);
 
-                var entity = await Repository.FindAsync(id);
+                var entity = await Queryable.FirstOrDefaultAsync(e => e.Id == id);
                 if (entity == null)
                     return Result<TResult>.Failed(string.Format(AppValues.NotFound, typeof(TEntity)));
 

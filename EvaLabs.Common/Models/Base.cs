@@ -2,8 +2,8 @@
 
 namespace EvaLabs.Common.Models
 {
-    public abstract class Base : Auditable<int?>, IBase<int>
+    public class Base : Auditable<int?>, IBase<int>
     {
-        public virtual string Name { get; set; }
+        public string Name { get; set; }
     }
 }

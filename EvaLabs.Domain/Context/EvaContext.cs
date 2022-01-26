@@ -3,8 +3,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EvaLabs.Domain.Context
 {
-    public sealed partial class EvaContext : DbContext
+    public sealed partial class EvaContext : DbContext, IEvaContext
     {
+        public EvaContext()
+        {
+        }
 
         public EvaContext(DbContextOptions<EvaContext> options)
             : base(options)
@@ -12,16 +15,16 @@ namespace EvaLabs.Domain.Context
             ChangeTracker.LazyLoadingEnabled = false;
         }
 
-        public DbSet<User> Users { get; set; }
-        public DbSet<Area> Areas { get; set; }
-        public DbSet<Branch> Branches { get; set; }
-        public DbSet<City> Cities { get; set; }
-        public DbSet<Lab> Labs { get; set; }
-        public DbSet<Test> Tests { get; set; }
-        public DbSet<TestStatus> TestStatuses { get; set; }
-        public DbSet<UserTest> UserTests { get; set; }
-        public DbSet<TestResult> TestResults { get; set; }
-        public DbSet<TestBranchs> TestBranchs { get; set; }
+        public DbSet<User> Users { get; set; } // Users
+        public DbSet<Area> Areas { get; set; } // Areas
+        public DbSet<Branch> Branches { get; set; } // Branches
+        public DbSet<City> Cities { get; set; } // Cities
+        public DbSet<Lab> Labs { get; set; } // Labs
+        public DbSet<Test> Tests { get; set; } // Tests
+        public DbSet<TestBranch> TestBranches { get; set; } // TestBranchs
+        public DbSet<TestResult> TestResults { get; set; } // TestResults
+        public DbSet<TestStatus> TestStatus { get; set; } // TestStatuses
+        public DbSet<UserTest> UserTests { get; set; } // UserTests
 
     }
 }

@@ -1,0 +1,37 @@
+@model IEnumerable<Branch>
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.BranchName)</th>
+            <th>@Html.DisplayNameFor(model => model.BranchAddress)</th>
+            <th>@Html.DisplayNameFor(model => model.Area)</th>
+            <th>@Html.DisplayNameFor(model => model.Lab)</th>
+            <th>@Html.DisplayNameFor(model => model.IsActive)</th>
+            <th>@Html.DisplayNameFor(model => model.CreatorId)</th>
+            <th>@Html.DisplayNameFor(model => model.CreationDate)</th>
+            <th>@Html.DisplayNameFor(model => model.ModifierId)</th>
+            <th>@Html.DisplayNameFor(model => model.LastModifiedDate)</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.BranchName)</td>
+                <td>@Html.DisplayFor(modelItem => item.BranchAddress)</td>
+                <td>@Html.DisplayFor(modelItem => item.Area.Id)</td>
+                <td>@Html.DisplayFor(modelItem => item.Lab.Id)</td>
+                <td>@Html.DisplayFor(modelItem => item.IsActive)</td>
+                <td>@Html.DisplayFor(modelItem => item.CreatorId)</td>
+                <td>@Html.DisplayFor(modelItem => item.CreationDate)</td>
+                <td>@Html.DisplayFor(modelItem => item.ModifierId)</td>
+                <td>@Html.DisplayFor(modelItem => item.LastModifiedDate)</td>
+                <partial name="_Actions" model="@item" />
+            </tr>
+        }
+    </tbody>
+</table>

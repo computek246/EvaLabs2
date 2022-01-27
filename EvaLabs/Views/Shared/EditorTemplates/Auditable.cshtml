@@ -1,0 +1,7 @@
+﻿@model Auditable
+
+<td>@Html.DisplayFor(model => model.CreatorId)</td>
+<td>@Html.DisplayFor(model => model.CreationDate)</td>
+<td>@Html.DisplayFor(model => model.ModifierId)</td>
+<td>@Html.DisplayFor(model => model.LastModifiedDate)</td>
+<partial name="_Actions" model="@Model"/>

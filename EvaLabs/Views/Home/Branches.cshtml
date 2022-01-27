@@ -1,7 +1,7 @@
 ﻿<h1>Branches</h1>
 @(Html.Kendo().Grid<BranchViewModel>()
     .Name("gridBranches")
-    .HtmlAttributes(new { })
+    .HtmlAttributes(new {})
     .GetGridBuilder(grid =>
     {
         grid.Columns(columns =>
@@ -10,7 +10,6 @@
             columns.Bound(e => e.BranchAddress).Width(600).Title("Branch Address");
             columns.Bound(e => e.AreaName).Width(300).Title("Area").Hidden(true);
             columns.Bound(e => e.CityName).Width(300).Title("City").Hidden(true);
-
         });
         grid.Search(search =>
         {
@@ -44,11 +43,7 @@
                 g.Add(e => e.AreaName);
             })
             .Read(read => read.Action("Branches_Read", "Home"))
-            .Model(model =>
-            {
-                model.Id(p => p.Id);
-            });
-
+            .Model(model => { model.Id(p => p.Id); });
     }))
 
 @section Scripts

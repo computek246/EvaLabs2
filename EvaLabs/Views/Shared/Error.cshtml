@@ -1,4 +1,4 @@
-﻿@model EvaLabs.Models.ErrorViewModel
+﻿@model ErrorViewModel
 @{
     ViewData["Title"] = "Error";
 }
@@ -27,10 +27,8 @@
 @if (Model.Messages != null && Model.Messages.Any())
 {
     var mes = "";
-    Model.Messages.ForEach(x =>
-    {
-        mes += $"<p>{x}</p>\n";
-    });
+    Model.Messages.ForEach(x => { mes += $"<p>{x}</p>\n"; });
 
-    @Html.Raw(mes);
+    @Html.Raw(mes)
+    ;
 }

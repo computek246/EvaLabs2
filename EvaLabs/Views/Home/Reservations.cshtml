@@ -1,7 +1,38 @@
-﻿
-@{
-    ViewData["Title"] = "Reservations";
+﻿<h1>Reservations</h1>
+@(Html.Kendo().Grid<UserTestViewModel>()
+    .Name("gridBranches")
+    .HtmlAttributes(new {})
+    .GetGridBuilder(grid =>
+    {
+        grid.Columns(columns =>
+        {
+            //columns.Bound(e => e.).Width(300).Title("Title");
+        });
+        grid.Search(search => { });
+        grid.Groupable(g => g.Enabled(false));
+        grid.ToolBar(t =>
+        {
+            if (CurrentUserService.IsAuthenticated)
+            {
+                t.Excel();
+                t.Pdf();
+            }
+            t.Search();
+        });
+        grid.Export("BranchesList", Url.Action("Export_Save", "Home"));
+    })
+    .DataSource(dataSource =>
+    {
+        dataSource
+            .Ajax()
+            .PageSize(20)
+            .ServerOperation(true)
+            .Events(events => events.Error("error_handler"))
+            .Read(read => read.Action("Branches_Read", "Home"))
+            .Model(model => { model.Id(p => p.Id); });
+    }))
+
+@section Scripts
+{
+
 }
-
-<h1>Reservations</h1>
-

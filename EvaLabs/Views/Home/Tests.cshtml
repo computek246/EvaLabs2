@@ -1,7 +1,7 @@
 ﻿<h1>Tests</h1>
 @(Html.Kendo().Grid<TestViewModel>()
     .Name("gridTests")
-    .HtmlAttributes(new { })
+    .HtmlAttributes(new {})
     .GetGridBuilder(grid =>
     {
         grid.Columns(columns =>
@@ -9,7 +9,6 @@
             columns.Bound(e => e.TestName).Width(300).Title("Test Name");
             columns.Bound(e => e.TestDetails).Width(600).Title("Test Details");
             columns.Bound(e => e.Price).Width(150).Title("Test Price");
-          
         });
         grid.Search(search =>
         {
@@ -36,11 +35,7 @@
             .ServerOperation(true)
             .Events(events => events.Error("error_handler"))
             .Read(read => read.Action("Tests_Read", "Home"))
-            .Model(model =>
-            {
-                model.Id(p => p.Id);
-            });
-
+            .Model(model => { model.Id(p => p.Id); });
     }))
 
 @section Scripts

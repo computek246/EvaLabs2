@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using AutoMapper;
+using EvaLabs.Domain.Context;
 using EvaLabs.Domain.Entities;
 using EvaLabs.Infrastructure;
 using EvaLabs.Models;
@@ -13,21 +14,24 @@ using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace EvaLabs.Controllers
 {
-
     public class HomeController : BaseController
     {
-        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IEvaContext _context;
+        private readonly IUnitOfWork _unitOfWork;
 
         public HomeController(
+            IEvaContext context,
             IUnitOfWork unitOfWork,
             IMapper mapper
-            )
+        )
         {
+            _context = context;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
@@ -78,6 +82,7 @@ namespace EvaLabs.Controllers
 
         public IActionResult CreateReservation()
         {
+            ViewData["TestId"] = new SelectList(_context.Tests, "Id", "TestName");
             return View();
         }
 
@@ -88,9 +93,6 @@ namespace EvaLabs.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-
-
-
 
 
         [HttpPost]
@@ -139,8 +141,34 @@ namespace EvaLabs.Controllers
         }
 
 
+        public async Task<IActionResult> GeBranches()
+        {
+            return Json(await _unitOfWork.GetRepository<Branch>()
+                .GetAll(t => t.IsActive).Select(x => new
+                {
+                    Id = x.Id,
+                    Name = x.BranchName
+                }).ToListAsync());
+        }
 
+        public async Task<IActionResult> GetCities()
+        {
+            return Json(await _unitOfWork.GetRepository<City>()
+                .GetAll(t => t.IsActive).Select(x => new
+                {
+                    Id = x.Id,
+                    Name = x.CityName
+                }).ToListAsync());
+        }
 
-
+        public async Task<IActionResult> GetAreas(int cityId)
+        {
+            return Json(await _unitOfWork.GetRepository<Area>()
+                .GetAll(t => t.IsActive && t.CityId == cityId).Select(x => new
+                {
+                    Id = x.Id,
+                    Name = x.AreaName
+                }).ToListAsync());
+        }
     }
 }

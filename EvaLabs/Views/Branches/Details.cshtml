@@ -1,17 +1,17 @@
 @model Branch
 <div>
     <h4>Branch</h4>
-    <hr />
+    <hr/>
     <dl class="row">
-        <dt class = "col-sm-2">@Html.DisplayNameFor(model => model.BranchName)</dt>
-        <dd class = "col-sm-10">@Html.DisplayFor(model => model.BranchName)</dd>
-        <dt class = "col-sm-2">@Html.DisplayNameFor(model => model.BranchAddress)</dt>
-        <dd class = "col-sm-10">@Html.DisplayFor(model => model.BranchAddress)</dd>
-        <dt class = "col-sm-2">@Html.DisplayNameFor(model => model.Area)</dt>
-        <dd class = "col-sm-10">@Html.DisplayFor(model => model.Area.Id)</dd>
-        <dt class = "col-sm-2">@Html.DisplayNameFor(model => model.Lab)</dt>
-        <dd class = "col-sm-10">@Html.DisplayFor(model => model.Lab.Id)</dd>
-        <partial name="_Detalis" model="Model" />
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.BranchName)</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.BranchName)</dd>
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.BranchAddress)</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.BranchAddress)</dd>
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Area)</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.Area.AreaName)</dd>
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Lab)</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.Lab.LabName)</dd>
+        <partial name="_Detalis" model="Model"/>
     </dl>
 </div>
-<partial name="_BackOrEdit" model="Model" />
+<partial name="_BackOrEdit" model="Model"/>

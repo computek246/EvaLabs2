@@ -6,6 +6,5 @@ namespace EvaLabs.Controllers
     [Authorize]
     public class BaseController : Controller
     {
-        
     }
 }

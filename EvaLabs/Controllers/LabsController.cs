@@ -1,9 +1,9 @@
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using EvaLabs.Domain.Context;
 using EvaLabs.Domain.Entities;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace EvaLabs.Controllers
 {
@@ -16,39 +16,31 @@ namespace EvaLabs.Controllers
             _context = context;
         }
 
-        
+
         public async Task<IActionResult> Index()
         {
             return View(await _context.Labs.ToListAsync());
         }
 
-        
+
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var lab = await _context.Labs
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (lab == null)
-            {
-                return NotFound();
-            }
+            if (lab == null) return NotFound();
 
             return View(lab);
         }
 
-        
+
         public IActionResult Create()
         {
             return View();
         }
 
-        
-        
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Lab lab)
@@ -59,36 +51,26 @@ namespace EvaLabs.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
             return View(lab);
         }
 
-        
+
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var lab = await _context.Labs.FindAsync(id);
-            if (lab == null)
-            {
-                return NotFound();
-            }
+            if (lab == null) return NotFound();
             return View(lab);
         }
 
-        
-        
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Lab lab)
         {
-            if (id != lab.Id)
-            {
-                return NotFound();
-            }
+            if (id != lab.Id) return NotFound();
 
             if (ModelState.IsValid)
             {
@@ -100,39 +82,31 @@ namespace EvaLabs.Controllers
                 catch (DbUpdateConcurrencyException)
                 {
                     if (!LabExists(lab.Id))
-                    {
                         return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    throw;
                 }
+
                 return RedirectToAction(nameof(Index));
             }
+
             return View(lab);
         }
 
-        
+
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var lab = await _context.Labs
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (lab == null)
-            {
-                return NotFound();
-            }
+            if (lab == null) return NotFound();
 
             return View(lab);
         }
 
-        
-        [HttpPost, ActionName("Delete")]
+
+        [HttpPost]
+        [ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {

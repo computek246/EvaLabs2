@@ -1,66 +1,81 @@
+@using EvaLabs.Domain.Enums
+@using EvaLabs.Common.ExtensionMethod
 @model UserTest
 <h4>UserTest</h4>
-<hr />
+<hr/>
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="UserId" class="control-label"></label>
-                <select asp-for="UserId" class ="form-control" asp-items="ViewBag.UserId"></select>
+                <select asp-for="UserId" class="form-control select2" asp-items="ViewBag.UserId"></select>
             </div>
             <div class="form-group">
                 <label asp-for="LabId" class="control-label"></label>
-                <select asp-for="LabId" class ="form-control" asp-items="ViewBag.LabId"></select>
+                <select asp-for="LabId" class="form-control select2" asp-items="ViewBag.LabId"></select>
             </div>
             <div class="form-group">
                 <label asp-for="BranchId" class="control-label"></label>
-                <select asp-for="BranchId" class ="form-control" asp-items="ViewBag.BranchId"></select>
+                <select asp-for="BranchId" class="form-control select2" asp-items="ViewBag.BranchId"></select>
             </div>
             <div class="form-group">
                 <label asp-for="TestId" class="control-label"></label>
-                <select asp-for="TestId" class ="form-control" asp-items="ViewBag.TestId"></select>
+                <select asp-for="TestId" class="form-control select2" asp-items="ViewBag.TestId"></select>
             </div>
             <div class="form-group">
                 <label asp-for="TestStatusId" class="control-label"></label>
-                <select asp-for="TestStatusId" class ="form-control" asp-items="ViewBag.TestStatusId"></select>
+                <select asp-for="TestStatusId" class="form-control select2" asp-items="ViewBag.TestStatusId"></select>
             </div>
+
+
             <div class="form-group">
                 <label asp-for="TestLocation" class="control-label"></label>
-                <input asp-for="TestLocation" class="form-control" />
-                <span asp-validation-for="TestLocation" class="text-danger"></span>
+                <div class=" row pl-5">
+                    @foreach (var item in Enum.GetValues(typeof(TestLocation)))
+                    {
+                        <div class="col-6">
+                            <label>
+                                @Html.RadioButtonFor(m => m.TestLocation, item.To<int>(), new {id = item})
+                                @item.ToString().AddSpacesToSentence()
+                            </label>
+                        </div>
+                    }
+                </div>
             </div>
+
+
             <div class="form-group">
                 <label asp-for="TestPrice" class="control-label"></label>
-                <input asp-for="TestPrice" class="form-control" />
+                <input asp-for="TestPrice" class="form-control"/>
                 <span asp-validation-for="TestPrice" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="TestDate" class="control-label"></label>
-                <input asp-for="TestDate" class="form-control" />
+                <input asp-for="TestDate" class="form-control"/>
                 <span asp-validation-for="TestDate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="ResultDate" class="control-label"></label>
-                <input asp-for="ResultDate" class="form-control" />
+                <input asp-for="ResultDate" class="form-control"/>
                 <span asp-validation-for="ResultDate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="CityId" class="control-label"></label>
-                <select asp-for="CityId" class ="form-control" asp-items="ViewBag.CityId"></select>
+                <select asp-for="CityId" class="form-control select2" asp-items="ViewBag.CityId"></select>
             </div>
             <div class="form-group">
                 <label asp-for="AreaId" class="control-label"></label>
-                <select asp-for="AreaId" class ="form-control" asp-items="ViewBag.AreaId"></select>
+                <select asp-for="AreaId" class="form-control select2" asp-items="ViewBag.AreaId"></select>
             </div>
             <div class="form-group">
                 <label asp-for="HomeAddress" class="control-label"></label>
-                <input asp-for="HomeAddress" class="form-control" />
+                <input asp-for="HomeAddress" class="form-control"/>
                 <span asp-validation-for="HomeAddress" class="text-danger"></span>
             </div>
             @Html.EditorFor(m => m.IsActive)
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Create" class="btn btn-primary"/>
             </div>
         </form>
     </div>
@@ -71,5 +86,5 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 }

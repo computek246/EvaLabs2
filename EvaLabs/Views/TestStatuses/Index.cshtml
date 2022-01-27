@@ -1,31 +1,30 @@
 @model IEnumerable<TestStatus>
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
+<partial name="_AddNew"/>
+<table class="table table-striped table-bordered">
     <thead>
-        <tr>
-            <th>@Html.DisplayNameFor(model => model.StatusName)</th>
-            <th>@Html.DisplayNameFor(model => model.IsActive)</th>
-            <th>@Html.DisplayNameFor(model => model.CreatorId)</th>
-            <th>@Html.DisplayNameFor(model => model.CreationDate)</th>
-            <th>@Html.DisplayNameFor(model => model.ModifierId)</th>
-            <th>@Html.DisplayNameFor(model => model.LastModifiedDate)</th>
-            <th></th>
-        </tr>
+    <tr>
+        <th>@Html.DisplayNameFor(model => model.StatusName)</th>
+        <th>@Html.DisplayNameFor(model => model.IsActive)</th>
+        <th>@Html.DisplayNameFor(model => model.CreatorId)</th>
+        <th>@Html.DisplayNameFor(model => model.CreationDate)</th>
+        <th>@Html.DisplayNameFor(model => model.ModifierId)</th>
+        <th>@Html.DisplayNameFor(model => model.LastModifiedDate)</th>
+        <th>Action</th>
+    </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@Html.DisplayFor(modelItem => item.StatusName)</td>
-                <td>@Html.DisplayFor(modelItem => item.IsActive)</td>
-                <td>@Html.DisplayFor(modelItem => item.CreatorId)</td>
-                <td>@Html.DisplayFor(modelItem => item.CreationDate)</td>
-                <td>@Html.DisplayFor(modelItem => item.ModifierId)</td>
-                <td>@Html.DisplayFor(modelItem => item.LastModifiedDate)</td>
-                <partial name="_Actions" model="@item" />
-            </tr>
-        }
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.StatusName)</td>
+            <td>@Html.DisplayFor(modelItem => item.IsActive)</td>
+            @Html.EditorFor(modelItem => item)
+        </tr>
+    }
     </tbody>
 </table>
+
+@section Scripts
+{
+    <script src="~/js/dataTableOptions.js"></script>
+}

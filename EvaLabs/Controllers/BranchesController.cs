@@ -1,10 +1,10 @@
 using System.Linq;
 using System.Threading.Tasks;
+using EvaLabs.Domain.Context;
+using EvaLabs.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using EvaLabs.Domain.Context;
-using EvaLabs.Domain.Entities;
 
 namespace EvaLabs.Controllers
 {
@@ -17,44 +17,35 @@ namespace EvaLabs.Controllers
             _context = context;
         }
 
-        
+
         public async Task<IActionResult> Index()
         {
             var evaContext = _context.Branches.Include(b => b.Area).Include(b => b.Lab);
             return View(await evaContext.ToListAsync());
         }
 
-        
+
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var branch = await _context.Branches
                 .Include(b => b.Area)
                 .Include(b => b.Lab)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (branch == null)
-            {
-                return NotFound();
-            }
+            if (branch == null) return NotFound();
 
             return View(branch);
         }
 
-        
+
         public IActionResult Create()
         {
-            ViewData["AreaId"] = new SelectList(_context.Areas, "Id", "Id");
-            ViewData["LabId"] = new SelectList(_context.Labs, "Id", "Id");
+            GetViewData(null);
             return View();
         }
 
-        
-        
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Branch branch)
@@ -65,40 +56,28 @@ namespace EvaLabs.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AreaId"] = new SelectList(_context.Areas, "Id", "Id", branch.AreaId);
-            ViewData["LabId"] = new SelectList(_context.Labs, "Id", "Id", branch.LabId);
+
+            GetViewData(branch);
             return View(branch);
         }
 
-        
+
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var branch = await _context.Branches.FindAsync(id);
-            if (branch == null)
-            {
-                return NotFound();
-            }
-            ViewData["AreaId"] = new SelectList(_context.Areas, "Id", "Id", branch.AreaId);
-            ViewData["LabId"] = new SelectList(_context.Labs, "Id", "Id", branch.LabId);
+            if (branch == null) return NotFound();
+            GetViewData(branch);
             return View(branch);
         }
 
-        
-        
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Branch branch)
         {
-            if (id != branch.Id)
-            {
-                return NotFound();
-            }
+            if (id != branch.Id) return NotFound();
 
             if (ModelState.IsValid)
             {
@@ -110,43 +89,34 @@ namespace EvaLabs.Controllers
                 catch (DbUpdateConcurrencyException)
                 {
                     if (!BranchExists(branch.Id))
-                    {
                         return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    throw;
                 }
+
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AreaId"] = new SelectList(_context.Areas, "Id", "Id", branch.AreaId);
-            ViewData["LabId"] = new SelectList(_context.Labs, "Id", "Id", branch.LabId);
+
+            GetViewData(branch);
             return View(branch);
         }
 
-        
+
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var branch = await _context.Branches
                 .Include(b => b.Area)
                 .Include(b => b.Lab)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (branch == null)
-            {
-                return NotFound();
-            }
+            if (branch == null) return NotFound();
 
             return View(branch);
         }
 
-        
-        [HttpPost, ActionName("Delete")]
+
+        [HttpPost]
+        [ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
@@ -159,6 +129,12 @@ namespace EvaLabs.Controllers
         private bool BranchExists(int id)
         {
             return _context.Branches.Any(e => e.Id == id);
+        }
+
+        private void GetViewData(Branch branch)
+        {
+            ViewData["AreaId"] = new SelectList(_context.Areas, "Id", "AreaName", branch?.AreaId);
+            ViewData["LabId"] = new SelectList(_context.Labs, "Id", "LabName", branch?.LabId);
         }
     }
 }

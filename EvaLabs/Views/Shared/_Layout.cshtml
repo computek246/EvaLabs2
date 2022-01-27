@@ -1,34 +1,30 @@
-﻿
-@{
-    var controller = (string)ViewContext.RouteData.Values["controller"];
-    var action = (string)ViewContext.RouteData.Values["action"];
+﻿@{
+    var controller = (string) ViewContext.RouteData.Values["controller"];
+    var action = (string) ViewContext.RouteData.Values["action"];
     var title = controller != null ? controller + (action == "Index" ? "" : $" > {action}") : "";
 }
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/x-icon" href="~/assets/favicon.ico" />
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="icon" type="image/x-icon" href="~/assets/favicon.ico"/>
     <title>@title | @AppSettings.Value.AppName</title>
-    <partial name="_StyleLinks" />
+    <partial name="_StyleLinks"/>
 
 </head>
 <body>
 
-    <partial name="_Header" />
-    <div class="container">
-        <main role="main" class="pb-3">
-            
-            <div class="row"><div class="col-12"><br /></div></div>
+<partial name="_Header"/>
+<div class="container">
+    <main role="main" class="pb-3">
+        @RenderBody()
+    </main>
+</div>
 
-            @RenderBody()
-        </main>
-    </div>
-
-    <partial name="_Footer" />
-    <partial name="_ScriptLinks" />
-    @await RenderSectionAsync("Scripts", required: false)
+<partial name="_Footer"/>
+<partial name="_ScriptLinks"/>
+@await RenderSectionAsync("Scripts", false)
 </body>
 </html>

@@ -1,41 +1,55 @@
-using System.Linq;
 using System.Threading.Tasks;
-using EvaLabs.Domain.Context;
 using EvaLabs.Domain.Entities;
+using EvaLabs.Services.ExtensionMethod;
+using EvaLabs.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 
 namespace EvaLabs.Controllers
 {
+    /// <summary>
+    /// Branches Controller
+    /// </summary>
     public class BranchesController : BaseController
     {
-        private readonly IEvaContext _context;
+        private readonly IBranchService _branchService;
+        private readonly ILabService _labService;
+        private readonly IAreaService _areaService;
 
-        public BranchesController(IEvaContext context)
+        public BranchesController(
+            IBranchService branchService,
+            ILabService labService,
+            IAreaService areaService
+            )
         {
-            _context = context;
+            _branchService = branchService;
+            _labService = labService;
+            _areaService = areaService;
         }
 
 
         public async Task<IActionResult> Index()
         {
-            var evaContext = _context.Branches.Include(b => b.Area).Include(b => b.Lab);
-            return View(await evaContext.ToListAsync());
+            var result = await _branchService.ListAllAsync();
+            if (result.IsSucceeded)
+            {
+                return View(result.Data);
+            }
+
+            return Error(result.Messages);
         }
 
 
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null) return NotFound();
+            if (id == null) return BadRequest();
 
-            var branch = await _context.Branches
-                .Include(b => b.Area)
-                .Include(b => b.Lab)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (branch == null) return NotFound();
+            var result = await _branchService.GetByIdAsync(id.Value);
+            if (result.IsSucceeded)
+            {
+                return View(result.Data);
+            }
 
-            return View(branch);
+            return Error(result.Messages);
         }
 
 
@@ -52,9 +66,13 @@ namespace EvaLabs.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(branch);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                var result = await _branchService.CreateOrUpdateAsync(branch);
+                if (result.IsSucceeded)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+
+                return Error(result.Messages);
             }
 
             GetViewData(branch);
@@ -64,12 +82,16 @@ namespace EvaLabs.Controllers
 
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null) return NotFound();
+            if (id == null) return BadRequest();
 
-            var branch = await _context.Branches.FindAsync(id);
-            if (branch == null) return NotFound();
-            GetViewData(branch);
-            return View(branch);
+            var result = await _branchService.GetByIdAsync(id.Value);
+            if (result.IsSucceeded)
+            {
+                GetViewData(result.Data);
+                return View(result.Data);
+            }
+
+            return Error(result.Messages);
         }
 
 
@@ -81,19 +103,13 @@ namespace EvaLabs.Controllers
 
             if (ModelState.IsValid)
             {
-                try
+                var result = await _branchService.CreateOrUpdateAsync(branch);
+                if (result.IsSucceeded)
                 {
-                    _context.Update(branch);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!BranchExists(branch.Id))
-                        return NotFound();
-                    throw;
+                    return RedirectToAction(nameof(Index));
                 }
 
-                return RedirectToAction(nameof(Index));
+                return Error(result.Messages);
             }
 
             GetViewData(branch);
@@ -103,15 +119,15 @@ namespace EvaLabs.Controllers
 
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null) return NotFound();
+            if (id == null) return BadRequest();
 
-            var branch = await _context.Branches
-                .Include(b => b.Area)
-                .Include(b => b.Lab)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (branch == null) return NotFound();
+            var result = await _branchService.GetByIdAsync(id.Value);
+            if (result.IsSucceeded)
+            {
+                return View(result.Data);
+            }
 
-            return View(branch);
+            return Error(result.Messages);
         }
 
 
@@ -120,21 +136,21 @@ namespace EvaLabs.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var branch = await _context.Branches.FindAsync(id);
-            _context.Branches.Remove(branch);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            var result = await _branchService.DeleteAsync(id);
+            if (result.IsSucceeded)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            return Error(result.Messages);
         }
 
-        private bool BranchExists(int id)
-        {
-            return _context.Branches.Any(e => e.Id == id);
-        }
+
 
         private void GetViewData(Branch branch)
         {
-            ViewData["AreaId"] = new SelectList(_context.Areas, "Id", "AreaName", branch?.AreaId);
-            ViewData["LabId"] = new SelectList(_context.Labs, "Id", "LabName", branch?.LabId);
+            ViewData["AreaId"] = _areaService.AsEnumerable().AsSelectList("Id", "AreaName", branch?.AreaId);
+            ViewData["LabId"] = _labService.AsEnumerable().AsSelectList("Id", "LabName", branch?.LabId);
         }
     }
 }

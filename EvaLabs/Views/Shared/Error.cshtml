@@ -28,7 +28,5 @@
 {
     var mes = "";
     Model.Messages.ForEach(x => { mes += $"<p>{x}</p>\n"; });
-
     @Html.Raw(mes)
-    ;
 }

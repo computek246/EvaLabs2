@@ -4,7 +4,7 @@ using EvaLabs.ViewModels.Common;
 
 namespace EvaLabs.Services.Interfaces
 {
-    public interface IUserTestService : IService<int, UserTest, FilterVm>
+    public interface ITestResultService : IService<int, TestResult, FilterVm>
     {
     }
 }

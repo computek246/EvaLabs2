@@ -22,13 +22,12 @@ namespace EvaLabs.Helper.Attributes
 
         public void OnActionExecuting(ActionExecutingContext context)
         {
-            _logger.LogInformation(new string('-', 100));
-            _logger.LogInformation($"OnActionExecuting :{context.ActionDescriptor.DisplayName}");
+            _logger.LogTrace($"OnActionExecuting :{context.ActionDescriptor.DisplayName}");
         }
 
         public void OnActionExecuted(ActionExecutedContext context)
         {
-            _logger.LogInformation($"OnActionExecuted :{context.ActionDescriptor.DisplayName}");
+            _logger.LogTrace($"OnActionExecuted :{context.ActionDescriptor.DisplayName}");
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Net;
 
 namespace EvaLabs.Common.ViewModels
 {
@@ -13,5 +14,7 @@ namespace EvaLabs.Common.ViewModels
         public TResult Data { get; set; }
         public bool IsSucceeded { get; set; }
         public List<string> Messages { get; set; }
+        public HttpStatusCode StatusCode { get; set; }
+
     }
 }

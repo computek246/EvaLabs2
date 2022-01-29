@@ -86,6 +86,28 @@ namespace EvaLabs.Controllers
             return View();
         }
 
+        [HttpPost]
+        public async Task<IActionResult> CreateReservation(UserTest userTest)
+        {
+            if (userTest == null)
+                return BadRequest();
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    await Task.CompletedTask;
+                }
+                catch (Exception exception)
+                {
+                    Console.WriteLine(exception);
+                    throw;
+                }
+            }
+
+            return View(userTest);
+        }
+
 
         [AllowAnonymous]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

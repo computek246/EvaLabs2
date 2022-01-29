@@ -1,37 +1,47 @@
-using System.Linq;
 using System.Threading.Tasks;
-using EvaLabs.Domain.Context;
+using EvaLabs.Common.ExtensionMethod;
 using EvaLabs.Domain.Entities;
+using EvaLabs.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace EvaLabs.Controllers
 {
+    /// <summary>
+    /// Cities Controller
+    /// </summary>
     public class CitiesController : BaseController
     {
-        private readonly IEvaContext _context;
+        private readonly ICityService _cityService;
 
-        public CitiesController(IEvaContext context)
+        public CitiesController(ICityService cityService)
         {
-            _context = context;
+            _cityService = cityService;
         }
 
 
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Cities.ToListAsync());
+            var result = await _cityService.ListAllAsync();
+            if (result.IsSucceeded)
+            {
+                return View(result.Data);
+            }
+
+            return Error(result.Messages);
         }
 
 
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null) return NotFound();
+            if (id == null) return BadRequest();
 
-            var city = await _context.Cities
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (city == null) return NotFound();
+            var result = await _cityService.GetByIdAsync(id.Value);
+            if (result.IsSucceeded)
+            {
+                return View(result.Data);
+            }
 
-            return View(city);
+            return Error(result.Messages);
         }
 
 
@@ -47,9 +57,13 @@ namespace EvaLabs.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(city);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                var result = await _cityService.CreateOrUpdateAsync(city);
+                if (result.IsSucceeded)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+
+                return Error(result.Messages);
             }
 
             return View(city);
@@ -58,11 +72,15 @@ namespace EvaLabs.Controllers
 
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null) return NotFound();
+            if (id == null) return BadRequest();
 
-            var city = await _context.Cities.FindAsync(id);
-            if (city == null) return NotFound();
-            return View(city);
+            var result = await _cityService.GetByIdAsync(id.Value);
+            if (result.IsSucceeded)
+            {
+                return View(result.Data);
+            }
+
+            return Error(result.Messages);
         }
 
 
@@ -74,19 +92,13 @@ namespace EvaLabs.Controllers
 
             if (ModelState.IsValid)
             {
-                try
+                var result = await _cityService.CreateOrUpdateAsync(city);
+                if (result.IsSucceeded)
                 {
-                    _context.Update(city);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!CityExists(city.Id))
-                        return NotFound();
-                    throw;
+                    return RedirectToAction(nameof(Index));
                 }
 
-                return RedirectToAction(nameof(Index));
+                return Error(result.Messages);
             }
 
             return View(city);
@@ -95,13 +107,15 @@ namespace EvaLabs.Controllers
 
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null) return NotFound();
+            if (id == null) return BadRequest();
 
-            var city = await _context.Cities
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (city == null) return NotFound();
+            var result = await _cityService.GetByIdAsync(id.Value);
+            if (result.IsSucceeded)
+            {
+                return View(result.Data);
+            }
 
-            return View(city);
+            return Error(result.Messages);
         }
 
 
@@ -110,15 +124,13 @@ namespace EvaLabs.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var city = await _context.Cities.FindAsync(id);
-            _context.Cities.Remove(city);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+            var result = await _cityService.DeleteAsync(id);
+            if (result.IsSucceeded)
+            {
+                return RedirectToAction(nameof(Index));
+            }
 
-        private bool CityExists(int id)
-        {
-            return _context.Cities.Any(e => e.Id == id);
+            return Error(result.Messages);
         }
     }
 }

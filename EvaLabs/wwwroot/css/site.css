@@ -99,3 +99,7 @@ body::-webkit-scrollbar-thumb {
         margin-right: 0;
     }
 
+
+.no-footer {
+    margin-bottom: 0px !important;
+}

@@ -1,10 +1,10 @@
+using EvaLabs.Domain.Entities;
 using EvaLabs.Services.BaseService;
-using EvaLabs.ViewModels;
 using EvaLabs.ViewModels.Common;
 
 namespace EvaLabs.Services.Interfaces
 {
-    public interface IBranchService : IService<int, BranchViewModel, FilterVm>
+    public interface IBranchService : IService<int, Branch, FilterVm>
     {
     }
 }

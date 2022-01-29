@@ -8,15 +8,14 @@ using Microsoft.Extensions.Logging;
 
 namespace EvaLabs.Services.Implementations
 {
-    public class TestBranchsService : BaseService<TestBranch>, ITestBranchsService
+    public class TestResultService : BaseService<TestResult>, ITestResultService
     {
-        public TestBranchsService(IUnitOfWork unitOfWork, ILogger<TestBranchsService> logger)
+        public TestResultService(IUnitOfWork unitOfWork, ILogger<TestResultService> logger)
             : base(unitOfWork, logger)
         {
         }
 
-
-        public override IQueryable<TestBranch> Queryable => base.Queryable
-            .Include(t => t.Branch).Include(t => t.Test);
+        public override IQueryable<TestResult> Queryable => base.Queryable
+            .Include(t => t.UserTest);
     }
 }

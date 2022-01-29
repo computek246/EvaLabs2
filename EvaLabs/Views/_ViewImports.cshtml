@@ -1,18 +1,24 @@
 @addTagHelper *, Kendo.Mvc
-@using EvaLabs.Common
+
 @using EvaLabs.Domain.Context
 @using EvaLabs.Domain.Entities
+@using EvaLabs.Domain.Enums
+
+@using EvaLabs.Common
+@using EvaLabs.Common.Constant
+@using EvaLabs.Common.ExtensionMethod
+@using EvaLabs.Common.Models
+
 @using EvaLabs.Helper
 @using EvaLabs.Models
-@using EvaLabs.Interfaces
-@using Kendo.Mvc.UI
-@using EvaLabs.Common.Models
-@using Microsoft.AspNetCore.Identity
-@using EvaLabs.Infrastructure.SingletonFactory
-@using Microsoft.Extensions.Options
-@using EvaLabs.Common.Constant
 @using EvaLabs.ViewModels
+@using EvaLabs.Interfaces
+@using EvaLabs.Infrastructure.SingletonFactory
 @using EvaLabs.Kendo.ExtensionMethod
+
+@using Kendo.Mvc.UI
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.Extensions.Options
 @using User = EvaLabs.Security.Entities.User
 
 @inject SignInManager<User> SignInManager

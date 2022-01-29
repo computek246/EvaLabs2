@@ -1,37 +1,46 @@
-using System.Linq;
 using System.Threading.Tasks;
-using EvaLabs.Domain.Context;
 using EvaLabs.Domain.Entities;
+using EvaLabs.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace EvaLabs.Controllers
 {
+    /// <summary>
+    /// Labs Controller
+    /// </summary>
     public class LabsController : BaseController
     {
-        private readonly IEvaContext _context;
+        private readonly ILabService _labService;
 
-        public LabsController(IEvaContext context)
+        public LabsController(ILabService labService)
         {
-            _context = context;
+            _labService = labService;
         }
 
 
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Labs.ToListAsync());
+            var result = await _labService.ListAllAsync();
+            if (result.IsSucceeded)
+            {
+                return View(result.Data);
+            }
+
+            return Error(result.Messages);
         }
 
 
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null) return NotFound();
+            if (id == null) return BadRequest();
 
-            var lab = await _context.Labs
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (lab == null) return NotFound();
+            var result = await _labService.GetByIdAsync(id.Value);
+            if (result.IsSucceeded)
+            {
+                return View(result.Data);
+            }
 
-            return View(lab);
+            return Error(result.Messages);
         }
 
 
@@ -47,9 +56,13 @@ namespace EvaLabs.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(lab);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                var result = await _labService.CreateOrUpdateAsync(lab);
+                if (result.IsSucceeded)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+
+                return Error(result.Messages);
             }
 
             return View(lab);
@@ -58,11 +71,15 @@ namespace EvaLabs.Controllers
 
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null) return NotFound();
+            if (id == null) return BadRequest();
 
-            var lab = await _context.Labs.FindAsync(id);
-            if (lab == null) return NotFound();
-            return View(lab);
+            var result = await _labService.GetByIdAsync(id.Value);
+            if (result.IsSucceeded)
+            {
+                return View(result.Data);
+            }
+
+            return Error(result.Messages);
         }
 
 
@@ -74,19 +91,13 @@ namespace EvaLabs.Controllers
 
             if (ModelState.IsValid)
             {
-                try
+                var result = await _labService.CreateOrUpdateAsync(lab);
+                if (result.IsSucceeded)
                 {
-                    _context.Update(lab);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!LabExists(lab.Id))
-                        return NotFound();
-                    throw;
+                    return RedirectToAction(nameof(Index));
                 }
 
-                return RedirectToAction(nameof(Index));
+                return Error(result.Messages);
             }
 
             return View(lab);
@@ -95,13 +106,15 @@ namespace EvaLabs.Controllers
 
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null) return NotFound();
+            if (id == null) return BadRequest();
 
-            var lab = await _context.Labs
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (lab == null) return NotFound();
+            var result = await _labService.GetByIdAsync(id.Value);
+            if (result.IsSucceeded)
+            {
+                return View(result.Data);
+            }
 
-            return View(lab);
+            return Error(result.Messages);
         }
 
 
@@ -110,15 +123,13 @@ namespace EvaLabs.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var lab = await _context.Labs.FindAsync(id);
-            _context.Labs.Remove(lab);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+            var result = await _labService.DeleteAsync(id);
+            if (result.IsSucceeded)
+            {
+                return RedirectToAction(nameof(Index));
+            }
 
-        private bool LabExists(int id)
-        {
-            return _context.Labs.Any(e => e.Id == id);
+            return Error(result.Messages);
         }
     }
 }

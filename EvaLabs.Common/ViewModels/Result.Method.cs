@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 
 namespace EvaLabs.Common.ViewModels
 {
@@ -8,11 +9,7 @@ namespace EvaLabs.Common.ViewModels
     {
         public static Result<TResult> Success(TResult data)
         {
-            return new()
-            {
-                Data = data,
-                IsSucceeded = true
-            };
+            return Success(data, new List<string>());
         }
 
         public static Result<TResult> Success(TResult data, List<string> messages)
@@ -21,27 +18,14 @@ namespace EvaLabs.Common.ViewModels
             {
                 Data = data,
                 IsSucceeded = true,
-                Messages = messages
-            };
-        }
-
-        public static Result<TResult> Success(TResult data, params string[] messages)
-        {
-            return new()
-            {
-                Data = data,
-                Messages = messages.Any() ? messages.ToList() : null,
-                IsSucceeded = true
+                Messages = messages,
+                StatusCode = HttpStatusCode.OK
             };
         }
 
         public static Result<TResult> Failed(params string[] messages)
         {
-            return new()
-            {
-                Messages = messages.Any() ? messages.ToList() : null,
-                IsSucceeded = false
-            };
+            return Failed(messages.ToList());
         }
 
         public static Result<TResult> Failed(Exception exception)
@@ -52,11 +36,7 @@ namespace EvaLabs.Common.ViewModels
                 messages.AddRange(exception.InnerException.Message.Split(Environment.NewLine));
             }
 
-            return new Result<TResult>
-            {
-                Messages = messages,
-                IsSucceeded = false
-            };
+            return Failed(messages);
         }
 
         public static Result<TResult> Failed(List<string> messages)
@@ -64,17 +44,23 @@ namespace EvaLabs.Common.ViewModels
             return new()
             {
                 Messages = messages,
-                IsSucceeded = false
+                IsSucceeded = false,
+                StatusCode = HttpStatusCode.BadRequest
             };
         }
 
-        public static Result<TResult> Failed(TResult data, List<string> messages)
+        public static Result<TResult> NotFound(params string[] messages)
+        {
+            return NotFound(messages.ToList());
+        }
+
+        public static Result<TResult> NotFound(List<string> messages)
         {
             return new()
             {
-                Data = data,
                 Messages = messages,
-                IsSucceeded = false
+                IsSucceeded = false,
+                StatusCode = HttpStatusCode.NotFound
             };
         }
     }

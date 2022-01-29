@@ -1,37 +1,46 @@
-using System.Linq;
 using System.Threading.Tasks;
-using EvaLabs.Domain.Context;
 using EvaLabs.Domain.Entities;
+using EvaLabs.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace EvaLabs.Controllers
 {
+    /// <summary>
+    /// Tests Controller
+    /// </summary>
     public class TestsController : BaseController
     {
-        private readonly IEvaContext _context;
+        private readonly ITestService _testService;
 
-        public TestsController(IEvaContext context)
+        public TestsController(ITestService testService)
         {
-            _context = context;
+            _testService = testService;
         }
 
 
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Tests.ToListAsync());
+            var result = await _testService.ListAllAsync();
+            if (result.IsSucceeded)
+            {
+                return View(result.Data);
+            }
+
+            return Error(result.Messages);
         }
 
 
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null) return NotFound();
+            if (id == null) return BadRequest();
 
-            var test = await _context.Tests
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (test == null) return NotFound();
+            var result = await _testService.GetByIdAsync(id.Value);
+            if (result.IsSucceeded)
+            {
+                return View(result.Data);
+            }
 
-            return View(test);
+            return Error(result.Messages);
         }
 
 
@@ -47,9 +56,13 @@ namespace EvaLabs.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(test);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                var result = await _testService.CreateOrUpdateAsync(test);
+                if (result.IsSucceeded)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+
+                return Error(result.Messages);
             }
 
             return View(test);
@@ -58,11 +71,15 @@ namespace EvaLabs.Controllers
 
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null) return NotFound();
+            if (id == null) return BadRequest();
 
-            var test = await _context.Tests.FindAsync(id);
-            if (test == null) return NotFound();
-            return View(test);
+            var result = await _testService.GetByIdAsync(id.Value);
+            if (result.IsSucceeded)
+            {
+                return View(result.Data);
+            }
+
+            return Error(result.Messages);
         }
 
 
@@ -74,19 +91,13 @@ namespace EvaLabs.Controllers
 
             if (ModelState.IsValid)
             {
-                try
+                var result = await _testService.CreateOrUpdateAsync(test);
+                if (result.IsSucceeded)
                 {
-                    _context.Update(test);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!TestExists(test.Id))
-                        return NotFound();
-                    throw;
+                    return RedirectToAction(nameof(Index));
                 }
 
-                return RedirectToAction(nameof(Index));
+                return Error(result.Messages);
             }
 
             return View(test);
@@ -95,13 +106,15 @@ namespace EvaLabs.Controllers
 
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null) return NotFound();
+            if (id == null) return BadRequest();
 
-            var test = await _context.Tests
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (test == null) return NotFound();
+            var result = await _testService.GetByIdAsync(id.Value);
+            if (result.IsSucceeded)
+            {
+                return View(result.Data);
+            }
 
-            return View(test);
+            return Error(result.Messages);
         }
 
 
@@ -110,15 +123,13 @@ namespace EvaLabs.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var test = await _context.Tests.FindAsync(id);
-            _context.Tests.Remove(test);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+            var result = await _testService.DeleteAsync(id);
+            if (result.IsSucceeded)
+            {
+                return RedirectToAction(nameof(Index));
+            }
 
-        private bool TestExists(int id)
-        {
-            return _context.Tests.Any(e => e.Id == id);
+            return Error(result.Messages);
         }
     }
 }

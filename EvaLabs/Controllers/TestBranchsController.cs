@@ -1,41 +1,51 @@
-using System.Linq;
 using System.Threading.Tasks;
-using EvaLabs.Domain.Context;
 using EvaLabs.Domain.Entities;
+using EvaLabs.Services.ExtensionMethod;
+using EvaLabs.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 
 namespace EvaLabs.Controllers
 {
     public class TestBranchsController : BaseController
     {
-        private readonly IEvaContext _context;
+        private readonly ITestBranchsService _testBranchsService;
+        private readonly ITestService _testService;
+        private readonly IBranchService _branchService;
 
-        public TestBranchsController(IEvaContext context)
+        public TestBranchsController(
+            ITestBranchsService testBranchsService,
+            ITestService testService,
+            IBranchService branchService)
         {
-            _context = context;
+            _testBranchsService = testBranchsService;
+            _testService = testService;
+            _branchService = branchService;
         }
 
 
         public async Task<IActionResult> Index()
         {
-            var evaContext = _context.TestBranches.Include(t => t.Branch).Include(t => t.Test);
-            return View(await evaContext.ToListAsync());
+            var result = await _testBranchsService.ListAllAsync();
+            if (result.IsSucceeded)
+            {
+                return View(result.Data);
+            }
+
+            return Error(result.Messages);
         }
 
 
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null) return NotFound();
+            if (id == null) return BadRequest();
 
-            var testBranch = await _context.TestBranches
-                .Include(t => t.Branch)
-                .Include(t => t.Test)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (testBranch == null) return NotFound();
+            var result = await _testBranchsService.GetByIdAsync(id.Value);
+            if (result.IsSucceeded)
+            {
+                return View(result.Data);
+            }
 
-            return View(testBranch);
+            return Error(result.Messages);
         }
 
 
@@ -52,9 +62,13 @@ namespace EvaLabs.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(testBranch);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                var result = await _testBranchsService.CreateOrUpdateAsync(testBranch);
+                if (result.IsSucceeded)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+
+                return Error(result.Messages);
             }
 
             GetViewData(testBranch);
@@ -64,12 +78,16 @@ namespace EvaLabs.Controllers
 
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null) return NotFound();
+            if (id == null) return BadRequest();
 
-            var testBranch = await _context.TestBranches.FindAsync(id);
-            if (testBranch == null) return NotFound();
-            GetViewData(testBranch);
-            return View(testBranch);
+            var result = await _testBranchsService.GetByIdAsync(id.Value);
+            if (result.IsSucceeded)
+            {
+                GetViewData(result.Data);
+                return View(result.Data);
+            }
+
+            return Error(result.Messages);
         }
 
 
@@ -81,19 +99,13 @@ namespace EvaLabs.Controllers
 
             if (ModelState.IsValid)
             {
-                try
+                var result = await _testBranchsService.CreateOrUpdateAsync(testBranch);
+                if (result.IsSucceeded)
                 {
-                    _context.Update(testBranch);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!TestBranchExists(testBranch.Id))
-                        return NotFound();
-                    throw;
+                    return RedirectToAction(nameof(Index));
                 }
 
-                return RedirectToAction(nameof(Index));
+                return Error(result.Messages);
             }
 
             GetViewData(testBranch);
@@ -103,15 +115,15 @@ namespace EvaLabs.Controllers
 
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null) return NotFound();
+            if (id == null) return BadRequest();
 
-            var testBranch = await _context.TestBranches
-                .Include(t => t.Branch)
-                .Include(t => t.Test)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (testBranch == null) return NotFound();
+            var result = await _testBranchsService.GetByIdAsync(id.Value);
+            if (result.IsSucceeded)
+            {
+                return View(result.Data);
+            }
 
-            return View(testBranch);
+            return Error(result.Messages);
         }
 
 
@@ -120,21 +132,19 @@ namespace EvaLabs.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var testBranch = await _context.TestBranches.FindAsync(id);
-            _context.TestBranches.Remove(testBranch);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+            var result = await _testBranchsService.DeleteAsync(id);
+            if (result.IsSucceeded)
+            {
+                return RedirectToAction(nameof(Index));
+            }
 
-        private bool TestBranchExists(int id)
-        {
-            return _context.TestBranches.Any(e => e.Id == id);
+            return Error(result.Messages);
         }
 
         private void GetViewData(TestBranch testBranch)
         {
-            ViewData["BranchId"] = new SelectList(_context.Branches, "Id", "BranchName", testBranch?.BranchId);
-            ViewData["TestId"] = new SelectList(_context.Tests, "Id", "TestName", testBranch?.TestId);
+            ViewData["BranchId"] = _branchService.AsEnumerable().AsSelectList("Id", "BranchName", testBranch?.BranchId);
+            ViewData["TestId"] = _testService.AsEnumerable().AsSelectList("Id", "TestName", testBranch?.TestId);
         }
     }
 }

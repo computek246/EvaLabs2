@@ -1,40 +1,49 @@
-using System.Linq;
 using System.Threading.Tasks;
-using EvaLabs.Domain.Context;
 using EvaLabs.Domain.Entities;
+using EvaLabs.Services.ExtensionMethod;
+using EvaLabs.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 
 namespace EvaLabs.Controllers
 {
+    /// <summary>
+    /// Areas Controller
+    /// </summary>
     public class AreasController : BaseController
     {
-        private readonly IEvaContext _context;
+        private readonly IAreaService _areaService;
+        private readonly ICityService _cityService;
 
-        public AreasController(IEvaContext context)
+        public AreasController(IAreaService areaService, ICityService cityService)
         {
-            _context = context;
+            _areaService = areaService;
+            _cityService = cityService;
         }
 
 
         public async Task<IActionResult> Index()
         {
-            var evaContext = _context.Areas.Include(a => a.City);
-            return View(await evaContext.ToListAsync());
+            var result = await _areaService.ListAllAsync();
+            if (result.IsSucceeded)
+            {
+                return View(result.Data);
+            }
+
+            return Error(result.Messages);
         }
 
 
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null) return NotFound();
+            if (id == null) return BadRequest();
 
-            var area = await _context.Areas
-                .Include(a => a.City)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (area == null) return NotFound();
+            var result = await _areaService.GetByIdAsync(id.Value);
+            if (result.IsSucceeded)
+            {
+                return View(result.Data);
+            }
 
-            return View(area);
+            return Error(result.Messages);
         }
 
 
@@ -51,9 +60,13 @@ namespace EvaLabs.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(area);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                var result = await _areaService.CreateOrUpdateAsync(area);
+                if (result.IsSucceeded)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+
+                return Error(result.Messages);
             }
 
             GetViewData(area);
@@ -63,12 +76,16 @@ namespace EvaLabs.Controllers
 
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null) return NotFound();
+            if (id == null) return BadRequest();
 
-            var area = await _context.Areas.FindAsync(id);
-            if (area == null) return NotFound();
-            GetViewData(area);
-            return View(area);
+            var result = await _areaService.GetByIdAsync(id.Value);
+            if (result.IsSucceeded)
+            {
+                GetViewData(result.Data);
+                return View(result.Data);
+            }
+
+            return Error(result.Messages);
         }
 
 
@@ -80,19 +97,13 @@ namespace EvaLabs.Controllers
 
             if (ModelState.IsValid)
             {
-                try
+                var result = await _areaService.CreateOrUpdateAsync(area);
+                if (result.IsSucceeded)
                 {
-                    _context.Update(area);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!AreaExists(area.Id))
-                        return NotFound();
-                    throw;
+                    return RedirectToAction(nameof(Index));
                 }
 
-                return RedirectToAction(nameof(Index));
+                return Error(result.Messages);
             }
 
             GetViewData(area);
@@ -102,14 +113,15 @@ namespace EvaLabs.Controllers
 
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null) return NotFound();
+            if (id == null) return BadRequest();
 
-            var area = await _context.Areas
-                .Include(a => a.City)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (area == null) return NotFound();
+            var result = await _areaService.GetByIdAsync(id.Value);
+            if (result.IsSucceeded)
+            {
+                return View(result.Data);
+            }
 
-            return View(area);
+            return Error(result.Messages);
         }
 
 
@@ -118,20 +130,18 @@ namespace EvaLabs.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var area = await _context.Areas.FindAsync(id);
-            _context.Areas.Remove(area);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+            var result = await _areaService.DeleteAsync(id);
+            if (result.IsSucceeded)
+            {
+                return RedirectToAction(nameof(Index));
+            }
 
-        private bool AreaExists(int id)
-        {
-            return _context.Areas.Any(e => e.Id == id);
+            return Error(result.Messages);
         }
 
         private void GetViewData(Area area)
         {
-            ViewData["CityId"] = new SelectList(_context.Cities, "Id", "CityName", area?.CityId);
+            ViewData["CityId"] = _cityService.AsEnumerable().AsSelectList("Id", "CityName", area?.CityId);
         }
     }
 }

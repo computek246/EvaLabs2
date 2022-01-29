@@ -1,10 +1,7 @@
-﻿using System.Linq;
-using EvaLabs.Common.ExtensionMethod;
+﻿using EvaLabs.Common.ExtensionMethod;
 using EvaLabs.Common.Installers;
 using EvaLabs.Domain.Context;
-using EvaLabs.Domain.Entities;
 using EvaLabs.Infrastructure;
-using EvaLabs.Infrastructure.SingletonFactory;
 using EvaLabs.Services.BaseService;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

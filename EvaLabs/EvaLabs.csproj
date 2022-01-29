@@ -4,6 +4,10 @@
     <TargetFramework>net5.0</TargetFramework>
     <CopyRefAssembliesToPublishDirectory>false</CopyRefAssembliesToPublishDirectory>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>D:\source\repos\EvaLabs2\EvaLabs\EvaLabs.xml</DocumentationFile>
+    <NoWarn>1701;1702;1591</NoWarn>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Logs\**" />
     <Content Remove="Logs\**" />

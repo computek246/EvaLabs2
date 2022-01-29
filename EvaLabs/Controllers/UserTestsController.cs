@@ -1,53 +1,64 @@
-using System.Linq;
 using System.Threading.Tasks;
-using EvaLabs.Domain.Context;
 using EvaLabs.Domain.Entities;
+using EvaLabs.Services.ExtensionMethod;
+using EvaLabs.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 
 namespace EvaLabs.Controllers
 {
+    /// <summary>
+    /// UserTests Controller
+    /// </summary>
     public class UserTestsController : BaseController
     {
-        private readonly IEvaContext _context;
+        private readonly IUserTestService _userTestService;
+        private readonly IAreaService _areaService;
+        private readonly IBranchService _branchService;
+        private readonly ICityService _cityService;
+        private readonly ILabService _labService;
+        private readonly ITestService _testService;
 
-        public UserTestsController(IEvaContext context)
+        public UserTestsController(
+            IUserTestService userTestService,
+            IAreaService areaService,
+            IBranchService branchService,
+            ICityService cityService,
+            ILabService labService,
+            ITestService testService
+            )
         {
-            _context = context;
+            _userTestService = userTestService;
+            _areaService = areaService;
+            _branchService = branchService;
+            _cityService = cityService;
+            _labService = labService;
+            _testService = testService;
         }
 
 
         public async Task<IActionResult> Index()
         {
-            var evaContext = _context.UserTests
-                .Include(u => u.Area)
-                .Include(u => u.Branch)
-                .Include(u => u.City)
-                .Include(u => u.Lab)
-                .Include(u => u.Test)
-                .Include(u => u.TestStatus)
-                .Include(u => u.User);
-            return View(await evaContext.ToListAsync());
+            var result = await _userTestService.ListAllAsync();
+            if (result.IsSucceeded)
+            {
+                return View(result.Data);
+            }
+
+            return Error(result.Messages);
         }
 
 
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null) return NotFound();
+            if (id == null) return BadRequest();
 
-            var userTest = await _context.UserTests
-                .Include(u => u.Area)
-                .Include(u => u.Branch)
-                .Include(u => u.City)
-                .Include(u => u.Lab)
-                .Include(u => u.Test)
-                .Include(u => u.TestStatus)
-                .Include(u => u.User)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (userTest == null) return NotFound();
+            var result = await _userTestService.GetByIdAsync(id.Value);
+            if (result.IsSucceeded)
+            {
+                return View(result.Data);
+            }
 
-            return View(userTest);
+            return Error(result.Messages);
         }
 
 
@@ -64,9 +75,13 @@ namespace EvaLabs.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(userTest);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                var result = await _userTestService.CreateOrUpdateAsync(userTest);
+                if (result.IsSucceeded)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+
+                return Error(result.Messages);
             }
 
             GetViewData(userTest);
@@ -76,12 +91,16 @@ namespace EvaLabs.Controllers
 
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null) return NotFound();
+            if (id == null) return BadRequest();
 
-            var userTest = await _context.UserTests.FindAsync(id);
-            if (userTest == null) return NotFound();
-            GetViewData(userTest);
-            return View(userTest);
+            var result = await _userTestService.GetByIdAsync(id.Value);
+            if (result.IsSucceeded)
+            {
+                GetViewData(result.Data);
+                return View(result.Data);
+            }
+
+            return Error(result.Messages);
         }
 
 
@@ -93,19 +112,13 @@ namespace EvaLabs.Controllers
 
             if (ModelState.IsValid)
             {
-                try
+                var result = await _userTestService.CreateOrUpdateAsync(userTest);
+                if (result.IsSucceeded)
                 {
-                    _context.Update(userTest);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!UserTestExists(userTest.Id))
-                        return NotFound();
-                    throw;
+                    return RedirectToAction(nameof(Index));
                 }
 
-                return RedirectToAction(nameof(Index));
+                return Error(result.Messages);
             }
 
             GetViewData(userTest);
@@ -115,20 +128,15 @@ namespace EvaLabs.Controllers
 
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null) return NotFound();
+            if (id == null) return BadRequest();
 
-            var userTest = await _context.UserTests
-                .Include(u => u.Area)
-                .Include(u => u.Branch)
-                .Include(u => u.City)
-                .Include(u => u.Lab)
-                .Include(u => u.Test)
-                .Include(u => u.TestStatus)
-                .Include(u => u.User)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (userTest == null) return NotFound();
+            var result = await _userTestService.GetByIdAsync(id.Value);
+            if (result.IsSucceeded)
+            {
+                return View(result.Data);
+            }
 
-            return View(userTest);
+            return Error(result.Messages);
         }
 
 
@@ -137,26 +145,22 @@ namespace EvaLabs.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var userTest = await _context.UserTests.FindAsync(id);
-            _context.UserTests.Remove(userTest);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+            var result = await _userTestService.DeleteAsync(id);
+            if (result.IsSucceeded)
+            {
+                return RedirectToAction(nameof(Index));
+            }
 
-        private bool UserTestExists(int id)
-        {
-            return _context.UserTests.Any(e => e.Id == id);
+            return Error(result.Messages);
         }
 
         private void GetViewData(UserTest userTest)
         {
-            ViewData["AreaId"] = new SelectList(_context.Areas, "Id", "AreaName", userTest?.AreaId);
-            ViewData["BranchId"] = new SelectList(_context.Branches, "Id", "BranchName", userTest?.BranchId);
-            ViewData["CityId"] = new SelectList(_context.Cities, "Id", "CityName", userTest?.CityId);
-            ViewData["LabId"] = new SelectList(_context.Labs, "Id", "LabName", userTest?.LabId);
-            ViewData["TestId"] = new SelectList(_context.Tests, "Id", "TestName", userTest?.TestId);
-            ViewData["TestStatusId"] = new SelectList(_context.TestStatus, "Id", "StatusName", userTest?.TestStatusId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "FullName", userTest?.UserId);
+            ViewData["AreaId"] = _areaService.AsEnumerable().AsSelectList("Id", "AreaName", userTest?.AreaId);
+            ViewData["BranchId"] = _branchService.AsEnumerable().AsSelectList("Id", "BranchName", userTest?.BranchId);
+            ViewData["CityId"] = _cityService.AsEnumerable().AsSelectList("Id", "CityName", userTest?.CityId);
+            ViewData["LabId"] = _labService.AsEnumerable().AsSelectList("Id", "LabName", userTest?.LabId);
+            ViewData["TestId"] = _testService.AsEnumerable().AsSelectList("Id", "TestName", userTest?.TestId);
         }
     }
 }

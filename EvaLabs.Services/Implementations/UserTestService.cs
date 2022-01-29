@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using AutoMapper;
 using EvaLabs.Domain.Entities;
 using EvaLabs.Infrastructure;
 using EvaLabs.Services.BaseService;
@@ -11,12 +10,9 @@ namespace EvaLabs.Services.Implementations
 {
     public class UserTestService : BaseService<UserTest>, IUserTestService
     {
-        private readonly IMapper _mapper;
-
-        public UserTestService(IMapper mapper, IUnitOfWork unitOfWork, ILogger<UserTestService> logger)
+        public UserTestService(IUnitOfWork unitOfWork, ILogger<UserTestService> logger)
             : base(unitOfWork, logger)
         {
-            _mapper = mapper;
         }
 
         public override IQueryable<UserTest> Queryable => base.Queryable
